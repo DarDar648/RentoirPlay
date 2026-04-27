@@ -1,11 +1,11 @@
-package com.app.rentoir.v1.ui
+package com.app.tiketin.v1.ui
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.app.rentoir.v1.databinding.ItemRentRowBinding
-import com.app.rentoir.v1.model.RentItem
+import com.app.tiketin.v1.databinding.ItemRentRowBinding
+import com.app.tiketin.v1.model.RentItem
 import java.text.NumberFormat
 import java.util.Locale
 class RentListAdapter(

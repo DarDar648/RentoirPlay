@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Rentoir Play"
+rootProject.name = "Tiket-in"
 include(":app")
  

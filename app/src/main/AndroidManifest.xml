@@ -2,15 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:allowBackup="true"
-        android:label="Rentoir"
+        android:label="Tiket-in"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Rentoir"
+        android:theme="@style/Theme.Tiketin"
         android:icon="@drawable/ic_food_logo"
         android:roundIcon="@drawable/ic_food_logo">
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.Rentoir.Splash">
+            android:theme="@style/Theme.Tiketin.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

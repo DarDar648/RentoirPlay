@@ -1,9 +1,9 @@
-package com.app.rentoir.v1
+package com.app.tiketin.v1
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.app.rentoir.v1.data.RentoirRepository
-import com.app.rentoir.v1.databinding.ActivityRentDetailBinding
+import com.app.tiketin.v1.data.TiketinRepository
+import com.app.tiketin.v1.databinding.ActivityRentDetailBinding
 import java.text.NumberFormat
 import java.util.Locale
 class RentDetailActivity : AppCompatActivity() {
@@ -18,7 +18,7 @@ class RentDetailActivity : AppCompatActivity() {
         binding = ActivityRentDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val id = intent.getIntExtra(EXTRA_RENT_ID, -1)
-        val item = RentoirRepository.getRentById(id)
+        val item = TiketinRepository.getRentById(id)
         if (item == null) {
             Toast.makeText(this, "Data menu tidak ditemukan",
                 Toast.LENGTH_SHORT).show()

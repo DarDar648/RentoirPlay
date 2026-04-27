@@ -1,4 +1,4 @@
-package com.app.rentoir.v1.model
+package com.app.tiketin.v1.model
 data class RentItem(
     val id: Int,
     val name: String,

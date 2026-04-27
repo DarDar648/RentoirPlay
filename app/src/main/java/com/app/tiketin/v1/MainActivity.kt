@@ -1,8 +1,8 @@
-package com.app.rentoir.v1 // Sesuaikan dengan namespace di build.gradle kamu
+package com.app.tiketin.v1 // Sesuaikan dengan namespace di build.gradle kamu
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.app.rentoir.v1.databinding.ActivityMainBinding
+import com.app.tiketin.v1.databinding.ActivityMainBinding
 import android.content.Intent
 
 class MainActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.app.rentoir.v1
+package com.app.tiketin.v1
 
 import org.junit.Test
 

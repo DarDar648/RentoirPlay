@@ -1,8 +1,8 @@
-package com.app.rentoir.v1.data
-import com.app.rentoir.v1.R
-import com.app.rentoir.v1.model.RentItem
+package com.app.tiketin.v1.data
+import com.app.tiketin.v1.R
+import com.app.tiketin.v1.model.RentItem
 
-object RentoirRepository {
+object TiketinRepository {
     fun getRents(): List<RentItem> {
         return listOf(
             RentItem(

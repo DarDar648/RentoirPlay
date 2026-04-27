@@ -1,4 +1,4 @@
-package com.app.rentoir.v1
+package com.app.tiketin.v1
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler

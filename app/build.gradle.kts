@@ -4,7 +4,7 @@ plugins {
 }
 android {
     // Namespace unik untuk aplikasi
-    namespace = "com.app.rentoir.v1"
+    namespace = "com.app.tiketin.v1"
     compileSdk {
         // Menentukan versi compile SDK
         version = release(36) {
@@ -14,7 +14,7 @@ android {
     }
     defaultConfig {
         // ID unik aplikasi
-        applicationId = "com.app.rentoir.v1"
+        applicationId = "com.app.tiketin.v1"
         // Minimum versi Android yang bisa menjalankan aplikasi
         minSdk = 24
         // Target versi Android yang dioptimalkan

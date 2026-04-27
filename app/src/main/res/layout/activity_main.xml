@@ -11,23 +11,6 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/space_lg"
         android:orientation="vertical">
-        <include
-            android:id="@+id/incHeader"
-            layout="@layout/view_home_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <include
-            android:id="@+id/incSearch"
-            layout="@layout/view_home_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_lg"/>
-        <include
-            android:id="@+id/incPromo"
-            layout="@layout/view_home_promo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_lg"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,21 +19,46 @@
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="@color/purple_500"
-            android:layout_marginBottom="48dp"/>
+            android:layout_marginBottom="0dp"/>
+
+        <include
+            android:id="@+id/incHeader"
+            layout="@layout/view_home_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <include
+            android:id="@+id/incSearch"
+            layout="@layout/view_home_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_lg"/>
 
         <TextView
             android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome, User!"
+            android:text="Destination"
             android:textSize="20sp"
-            android:layout_marginBottom="48dp"/>
+            android:layout_marginBottom="0dp"/>
+
+        <include
+            android:id="@+id/item1"
+            layout="@layout/item_wisata"/>
+
+        <include
+            android:id="@+id/item2"
+            layout="@layout/item_wisata"/>
+
+        <include
+            android:id="@+id/item3"
+            layout="@layout/item_wisata"/>
 
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="LOGOUT"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>D
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

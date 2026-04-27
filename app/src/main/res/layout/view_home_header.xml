@@ -9,7 +9,7 @@
         style="@style/Text.H1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Selamat datang 👋"
+        android:text="Selamat datang User!"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_xs"
-        android:text="UPNVJ, Jakarta"
+        android:text="📍  Jakarta"
         app:layout_constraintTop_toBottomOf="@id/tvGreeting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

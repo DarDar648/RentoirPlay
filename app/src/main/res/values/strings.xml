@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Tiket-in</string>
+    <string name="img_wisata">Gambar wisata</string>
+    <string name="nama_wisata">Nama Wisata</string>
+    <string name="lokasi">Lokasi</string>
+    <string name="rating_default">⭐ 4.8</string>
 </resources>

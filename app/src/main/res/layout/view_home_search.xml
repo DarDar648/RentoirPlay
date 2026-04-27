@@ -16,7 +16,7 @@
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cari makanan, minuman, atau restoran"
+        android:hint="Cari destinasi wisata"
         android:inputType="text"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"/>

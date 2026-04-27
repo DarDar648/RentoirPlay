@@ -1,39 +1,34 @@
-package com.app.tiketin.v1 // Sesuaikan dengan namespace di build.gradle kamu
+package com.app.tiketin.v1
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.app.tiketin.v1.databinding.ActivityMainBinding
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Toast
+import com.app.tiketin.v1.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    // Inisialisasi binding
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sessionManager: UserSessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Menghubungkan Kotlin dengan layout activity_main.xml
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /* KARENA REFACTORING (PERTEMUAN 3):
-           ID seperti tvGreeting sekarang berada di dalam layout 'incHeader'
-           ID seperti etSearch sekarang berada di dalam layout 'incSearch'
-        */
+        sessionManager = UserSessionManager(this)
 
-        // 1. Mengatur Header (dari view_home_header.xml)
-        binding.incHeader.tvGreeting.text = "Selamat datang 👋"
-        binding.incHeader.tvLocation.text = "UPNVJ, Jakarta"
+        val username = sessionManager.getUsername()
+        binding.tvWelcome.text = "Selamat Datang di Tiketin, $username!"
 
-        // 2. Mengatur Search Bar (dari view_home_search.xml)
-        binding.incSearch.etSearch.hint = "Cari makanan, minuman, atau restoran"
+        binding.btnLogout.setOnClickListener {
+            sessionManager.logout()
+            Toast.makeText(this, "Logout berhasil!", Toast.LENGTH_SHORT).show()
 
-        // 3. Mengatur Promo (dari view_home_promo.xml)
-        // Contoh: Jika ingin membuat tombol "Lihat Menu" bisa diklik
-        binding.incPromo.btnExplore.setOnClickListener {
-            startActivity(Intent(this, MenuListActivity::class.java))
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
-
     }
 }

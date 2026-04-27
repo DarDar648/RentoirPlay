@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Aliases (biar @style/Text dan @style/Card tidak error) -->
+    <style name="Text" parent="Text.H1" />
+    <style name="Card" parent="Card.Clean" />
+    <!-- Typography -->
+    <style name="Text.H1">
+        <item name="android:textSize">@dimen/text_h1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+    <style name="Text.BodyMuted">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_muted</item>
+    </style>
+    <style name="Text.SubtitleWhite">
+        <item name="android:textSize">@dimen/text_subtitle</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <!-- Card -->
+    <style name="Card.Clean">
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cardCornerRadius">@dimen/radius_lg</item>
+    </style>
+</resources>

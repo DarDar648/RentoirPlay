@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tilSearch"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:boxBackgroundMode="filled"
+    app:boxBackgroundColor="@android:color/white"
+    app:boxCornerRadiusTopStart="@dimen/radius_md"
+    app:boxCornerRadiusTopEnd="@dimen/radius_md"
+    app:boxCornerRadiusBottomStart="@dimen/radius_md"
+    app:boxCornerRadiusBottomEnd="@dimen/radius_md"
+    app:startIconDrawable="@android:drawable/ic_menu_search">
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cari makanan, minuman, atau restoran"
+        android:inputType="text"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"/>
+</com.google.android.material.textfield.TextInputLayout>

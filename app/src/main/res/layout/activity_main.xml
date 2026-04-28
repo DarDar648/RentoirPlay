@@ -1,112 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface_soft"
-    android:fillViewport="true">
+    android:background="@color/surface_soft">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/space_lg">
+        android:background="@color/surface_soft"
+        app:elevation="0dp">
 
-        <!-- App Logo/Brand Section -->
-        <TextView
-            android:id="@+id/tvAppName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_md"
-            android:text="Tiketin"
-            android:textColor="@color/brand_primary"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-        <!-- Header Section -->
-        <include
-            android:id="@+id/incHeader"
-            layout="@layout/view_home_header"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_md" />
+            android:padding="@dimen/space_md">
 
-        <!-- Search Section -->
-        <include
-            android:id="@+id/incSearch"
-            layout="@layout/view_home_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_lg" />
+            <TextView
+                android:id="@+id/tvAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiketin"
+                android:textColor="@color/brand_primary"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-        <!-- Destination Title -->
-        <TextView
-            android:id="@+id/tvWelcome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_md"
-            android:text="Destinasi Populer"
-            android:textColor="@color/text_primary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/btnLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-        <!-- Destination Items -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardItem1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_md"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            app:cardUseCompatPadding="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:text="Logout"
+                    android:textColor="@color/error"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_lock_power_off"
+                    app:tint="@color/error" />
+
+            </LinearLayout>
 
             <include
-                android:id="@+id/item1"
-                layout="@layout/item_wisata" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardItem2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_md"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            app:cardUseCompatPadding="true">
+                android:id="@+id/incHeader"
+                layout="@layout/view_home_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvAppName"
+                android:layout_marginTop="@dimen/space_md" />
 
             <include
-                android:id="@+id/item2"
-                layout="@layout/item_wisata" />
-        </androidx.cardview.widget.CardView>
+                android:id="@+id/incSearch"
+                layout="@layout/view_home_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/incHeader"
+                android:layout_marginTop="@dimen/space_md" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardItem3"
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_xl"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            app:cardUseCompatPadding="true">
+            android:orientation="vertical"
+            android:padding="@dimen/space_md">
 
-            <include
-                android:id="@+id/item3"
-                layout="@layout/item_wisata" />
-        </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_md"
+                android:text="Destinasi Populer"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <!-- Logout Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogout"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="LOGOUT"
-            android:textAllCaps="false"
-            android:textColor="@color/error"
-            app:strokeColor="@color/error"
-            app:icon="@android:drawable/ic_menu_close_clear_cancel"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/space_sm" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvWisata"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_wisata" />
 
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

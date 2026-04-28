@@ -6,61 +6,107 @@
     android:layout_height="match_parent"
     android:background="@color/surface_soft"
     android:fillViewport="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/space_lg"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/space_lg">
 
+        <!-- App Logo/Brand Section -->
         <TextView
+            android:id="@+id/tvAppName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_md"
             android:text="Tiketin"
+            android:textColor="@color/brand_primary"
             android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@color/purple_500"
-            android:layout_marginBottom="0dp"/>
+            android:textStyle="bold" />
 
+        <!-- Header Section -->
         <include
             android:id="@+id/incHeader"
             layout="@layout/view_home_header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_md" />
 
+        <!-- Search Section -->
         <include
             android:id="@+id/incSearch"
             layout="@layout/view_home_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginBottom="@dimen/space_lg" />
 
+        <!-- Destination Title -->
         <TextView
             android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Destination"
+            android:layout_marginBottom="@dimen/space_md"
+            android:text="Destinasi Populer"
+            android:textColor="@color/text_primary"
             android:textSize="20sp"
-            android:layout_marginBottom="0dp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
-        <include
-            android:id="@+id/item1"
-            layout="@layout/item_wisata"/>
+        <!-- Destination Items -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardItem1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_md"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
 
-        <include
-            android:id="@+id/item2"
-            layout="@layout/item_wisata"/>
+            <include
+                android:id="@+id/item1"
+                layout="@layout/item_wisata" />
+        </androidx.cardview.widget.CardView>
 
-        <include
-            android:id="@+id/item3"
-            layout="@layout/item_wisata"/>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardItem2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_md"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
 
-        <Button
+            <include
+                android:id="@+id/item2"
+                layout="@layout/item_wisata" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardItem3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_xl"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
+
+            <include
+                android:id="@+id/item3"
+                layout="@layout/item_wisata" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Logout Button -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="LOGOUT"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+            android:textAllCaps="false"
+            android:textColor="@color/error"
+            app:strokeColor="@color/error"
+            app:icon="@android:drawable/ic_menu_close_clear_cancel"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/space_sm" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

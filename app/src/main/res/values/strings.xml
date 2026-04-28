@@ -4,4 +4,15 @@
     <string name="nama_wisata">Nama Wisata</string>
     <string name="lokasi">Lokasi</string>
     <string name="rating_default">⭐ 4.8</string>
+
+    <string name="review_count_format">(%d ulasan)</string>
+    <string name="read_more">Baca selengkapnya</string>
+    <string name="read_less">Sembunyikan</string>
+    <string name="operational_hours_format">🕒 Jam Operasional: %s</string>
+    <string name="phone_format">📞 Telepon: %s</string>
+    <string name="website_format">🌐 Website: %s</string>
+    <string name="duration_format">⏳ Durasi: %s</string>
+    <string name="payment_coming_soon">Fitur pembayaran segera hadir</string>
+    <string name="opening_photo">Membuka foto...</string>
+    <string name="selecting_package">Memilih paket: %s</string>
 </resources>

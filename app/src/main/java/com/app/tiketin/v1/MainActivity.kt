@@ -4,10 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.tiketin.v1.adapter.HistoryAdapter
 import com.app.tiketin.v1.adapter.WisataAdapter
+import com.app.tiketin.v1.data.HistoryRepository
 import com.app.tiketin.v1.data.TiketinRepository
 import com.app.tiketin.v1.databinding.ActivityMainBinding
 import com.app.tiketin.v1.model.WisataItem
@@ -17,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sessionManager: UserSessionManager
     private lateinit var wisataAdapter: WisataAdapter
+    private lateinit var historyAdapter: HistoryAdapter
     private var allWisata = listOf<WisataItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         setupHeader()
         setupRecyclerView()
         setupSearch()
+        setupBottomNavigation()
 
         binding.btnLogout.setOnClickListener {
             sessionManager.logout()
@@ -43,13 +48,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupHeader() {
         val username = sessionManager.getUsername()
-        // Menggunakan tvGreeting yang ada di view_home_header.xml
         binding.incHeader.tvGreeting.text = "Selamat Datang, $username!"
-        // Mengubah judul section destinasi
-        binding.tvWelcome.text = "Destinasi Populer"
     }
 
     private fun setupRecyclerView() {
+        // Setup Wisata Adapter
         wisataAdapter = WisataAdapter(allWisata) { wisata ->
             val intent = Intent(this, WisataDetailActivity::class.java)
             intent.putExtra(WisataDetailActivity.EXTRA_ID, wisata.id)
@@ -61,10 +64,12 @@ class MainActivity : AppCompatActivity() {
             adapter = wisataAdapter
             isNestedScrollingEnabled = false
         }
+
+        // Setup History Adapter
+        historyAdapter = HistoryAdapter(HistoryRepository.getHistory())
     }
 
     private fun setupSearch() {
-        // etSearch berada di dalam incSearch (view_home_search.xml)
         binding.incSearch.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -72,6 +77,45 @@ class MainActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_search -> {
+                    showHomeView()
+                    binding.incSearch.etSearch.requestFocus()
+                    true
+                }
+                R.id.nav_history -> {
+                    showHistoryView()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun showHomeView() {
+        binding.tvWelcome.text = "Destinasi Populer"
+        binding.incHeader.root.visibility = View.VISIBLE
+        binding.incSearch.root.visibility = View.VISIBLE
+        binding.rvWisata.adapter = wisataAdapter
+        wisataAdapter.updateData(allWisata)
+    }
+
+    private fun showHistoryView() {
+        binding.tvWelcome.text = "Riwayat Pemesanan"
+        binding.incHeader.root.visibility = View.GONE
+        binding.incSearch.root.visibility = View.GONE
+        
+        val historyList = HistoryRepository.getHistory()
+        if (historyList.isEmpty()) {
+            Toast.makeText(this, "Belum ada riwayat pemesanan", Toast.LENGTH_SHORT).show()
+        }
+        
+        binding.rvWisata.adapter = historyAdapter
+        historyAdapter.updateData(historyList)
     }
 
     private fun filterData(query: String) {
@@ -84,5 +128,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         wisataAdapter.updateData(filteredList)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Refresh history if we are in history view
+        if (binding.bottomNavigation.selectedItemId == R.id.nav_history) {
+            showHistoryView()
+        }
     }
 }

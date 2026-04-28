@@ -15,4 +15,14 @@
     <string name="payment_coming_soon">Fitur pembayaran segera hadir</string>
     <string name="opening_photo">Membuka foto...</string>
     <string name="selecting_package">Memilih paket: %s</string>
+
+    <string name="title_select_package">Pilih Paket Wisata</string>
+    <string name="btn_confirm">KONFIRMASI</string>
+    <string name="msg_booking_success">Berhasil memesan: %1$s\nTotal: %2$s</string>
+    <string name="msg_select_package_first">Silakan pilih paket terlebih dahulu</string>
+
+    <string name="title_payment_qris">Pembayaran QRIS</string>
+    <string name="btn_confirm_order">KONFIRMASI PESANAN</string>
+    <string name="payment_total_format">Total: %s</string>
+    <string name="qr_code_desc">Kode QR Pembayaran</string>
 </resources>

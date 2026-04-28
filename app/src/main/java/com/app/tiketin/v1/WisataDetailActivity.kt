@@ -8,12 +8,20 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.tiketin.v1.adapter.PackageSelectionAdapter
+import com.app.tiketin.v1.data.HistoryRepository
 import com.app.tiketin.v1.data.TiketinRepository
 import com.app.tiketin.v1.databinding.ActivityWisataDetailBinding
+import com.app.tiketin.v1.databinding.BottomSheetPackageBinding
+import com.app.tiketin.v1.model.HistoryItem
 import com.app.tiketin.v1.model.PaketWisata
 import com.app.tiketin.v1.model.WisataItem
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class WisataDetailActivity : AppCompatActivity() {
@@ -24,6 +32,7 @@ class WisataDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWisataDetailBinding
     private var isDescriptionExpanded = false
+    private var selectedPaket: PaketWisata? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +108,7 @@ class WisataDetailActivity : AppCompatActivity() {
                     setImageResource(imgRes)
                     scaleType = ImageView.ScaleType.CENTER_CROP
                     clipToOutline = true
-                    setBackgroundResource(R.drawable.ic_launcher_background) 
+                    setBackgroundResource(R.drawable.ic_launcher_background)
                     setOnClickListener {
                         Toast.makeText(context, getString(R.string.opening_photo), Toast.LENGTH_SHORT).show()
                     }
@@ -107,7 +116,7 @@ class WisataDetailActivity : AppCompatActivity() {
                 layoutGallery.addView(imageView)
             }
 
-            // Packages
+            // Packages (Listing in detail page)
             layoutPackages.removeAllViews()
             item.tourPackages.forEach { paket ->
                 val packageView = createPackageView(paket)
@@ -115,9 +124,63 @@ class WisataDetailActivity : AppCompatActivity() {
             }
 
             btnBookNow.setOnClickListener {
-                Toast.makeText(this@WisataDetailActivity, getString(R.string.payment_coming_soon), Toast.LENGTH_SHORT).show()
+                showPackageSelectionBottomSheet(item)
             }
         }
+    }
+
+    private fun showPackageSelectionBottomSheet(wisata: WisataItem) {
+        val bottomSheetBinding = BottomSheetPackageBinding.inflate(layoutInflater)
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(bottomSheetBinding.root)
+
+        selectedPaket = null // Reset selection
+
+        val adapter = PackageSelectionAdapter(wisata.tourPackages) { paket ->
+            selectedPaket = paket
+        }
+
+        bottomSheetBinding.rvPackages.apply {
+            layoutManager = LinearLayoutManager(this@WisataDetailActivity)
+            this.adapter = adapter
+        }
+
+        // Step 1 -> Step 2 (Selection to Payment)
+        bottomSheetBinding.btnConfirm.setOnClickListener {
+            if (selectedPaket != null) {
+                bottomSheetBinding.layoutSelection.visibility = View.GONE
+                bottomSheetBinding.layoutPayment.visibility = View.VISIBLE
+                bottomSheetBinding.tvPaymentAmount.text = "Total: ${formatCurrency(selectedPaket!!.price)}"
+                bottomSheetBinding.ivQrCode.setImageResource(R.drawable.ic_launcher_background)
+            } else {
+                Toast.makeText(this, getString(R.string.msg_select_package_first), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Step 2 Finalization
+        bottomSheetBinding.btnFinalConfirm.setOnClickListener {
+            val date = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(Date())
+            
+            // Save to History Repository
+            val historyItem = HistoryItem(
+                id = System.currentTimeMillis().toString(),
+                wisataName = wisata.name,
+                packageName = selectedPaket?.name ?: "",
+                price = selectedPaket?.price ?: 0,
+                date = date,
+                imageResId = wisata.imageResId
+            )
+            HistoryRepository.addHistory(historyItem)
+
+            Toast.makeText(
+                this,
+                getString(R.string.msg_booking_success, selectedPaket?.name, formatCurrency(selectedPaket!!.price)),
+                Toast.LENGTH_LONG
+            ).show()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun createPackageView(paket: PaketWisata): View {
@@ -135,7 +198,7 @@ class WisataDetailActivity : AppCompatActivity() {
             )
             params.setMargins(0, 0, 0, resources.getDimensionPixelSize(R.dimen.space_sm))
             layoutParams = params
-            setBackgroundResource(R.drawable.ic_launcher_background) 
+            setBackgroundResource(R.drawable.ic_launcher_background)
             backgroundTintList = getColorStateList(R.color.surface_soft)
             elevation = 2f
 

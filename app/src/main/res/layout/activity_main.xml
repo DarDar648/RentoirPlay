@@ -32,7 +32,7 @@
             layout="@layout/view_home_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_lg"/>
+            android:layout_marginTop="15dp"/>
 
         <TextView
             android:id="@+id/tvWelcome"
@@ -40,7 +40,9 @@
             android:layout_height="wrap_content"
             android:text="Destination"
             android:textSize="20sp"
-            android:layout_marginBottom="0dp"/>
+            android:layout_marginBottom="0dp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"/>
 
         <include
             android:id="@+id/item1"

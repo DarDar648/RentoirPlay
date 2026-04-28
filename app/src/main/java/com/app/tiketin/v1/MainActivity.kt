@@ -61,5 +61,26 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        // CLICK ITEM 1
+        item1.setOnClickListener {
+            val intent = Intent(this, WisataDetailActivity::class.java)
+            intent.putExtra(WisataDetailActivity.EXTRA_ID, data[0].id)
+            startActivity(intent)
+        }
+
+// CLICK ITEM 2
+        item2.setOnClickListener {
+            val intent = Intent(this, WisataDetailActivity::class.java)
+            intent.putExtra(WisataDetailActivity.EXTRA_ID, data[1].id)
+            startActivity(intent)
+        }
+
+// CLICK ITEM 3
+        item3.setOnClickListener {
+            val intent = Intent(this, WisataDetailActivity::class.java)
+            intent.putExtra(WisataDetailActivity.EXTRA_ID, data[2].id)
+            startActivity(intent)
+        }
     }
 }

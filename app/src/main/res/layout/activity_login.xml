@@ -13,7 +13,7 @@
         android:text="Tiketin"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="@color/purple_500"
+        android:textColor="@color/brand_primary"
         android:layout_marginBottom="48dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Belum punya akun? Daftar di sini"
-        android:textColor="@color/purple_500"
+        android:textColor="@color/brand_primary"
         android:textSize="14sp"
         android:clickable="true"
         android:focusable="true"/>

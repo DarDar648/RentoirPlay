@@ -24,7 +24,8 @@
 
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".WisataDetailActivity"/>
+        <activity android:name=".WisataDetailActivity" />
+        <activity android:name=".ProfileActivity" />
 
     </application>
 

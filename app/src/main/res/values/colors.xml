@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Brand colors -->
-    <color name="brand_primary">#FF6200EE</color>
-    <color name="brand_secondary">#FF03DAC5</color>
-    <color name="brand_primary_variant">#FF3700B3</color>
-    <color name="brand_secondary_variant">#FF018786</color>
-
-    <!-- Surface colors -->
-    <color name="surface">#FFFFFFFF</color>
-    <color name="surface_soft">#FFF5F5F5</color>
-    <color name="surface_variant">#FFE5E5E5</color>
-
-    <!-- Text colors -->
-    <color name="text_primary">#FF000000</color>
-    <color name="text_secondary">#99000000</color>
-    <color name="text_muted">#66000000</color>
-    <color name="text_white">#FFFFFFFF</color>
-
-    <!-- Status/State colors -->
-    <color name="error">#FFB3261E</color>
-    <color name="success">#FF4CAF50</color>
-    <color name="warning">#FFFFC107</color>
-    <color name="info">#FF2196F3</color>
-
-    <!-- Default Android colors -->
+    <!-- Warna default Android -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -32,6 +9,29 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Splash Screen Background -->
-    <color name="splash_bg">#FFFFFFFF</color>
+    <!-- Warna untuk aplikasi Tiketin (BIRU tema) -->
+    <color name="background">#F5F5F5</color>
+    <color name="text_primary">#1C1C1C</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_muted">#9E9E9E</color>
+    <color name="text_white">#FFFFFF</color>
+
+    <!-- Warna Brand - BIRU -->
+    <color name="brand_primary">#2196F3</color>
+    <color name="brand_primary_variant">#1976D2</color>
+    <color name="brand_secondary">#FF5722</color>
+    <color name="brand_secondary_variant">#E64A19</color>
+
+    <!-- Warna Surface -->
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_soft">#EEEEEE</color>
+    <color name="surface_variant">#E0E0E0</color>
+
+    <!-- Warna Status -->
+    <color name="error">#F44336</color>
+    <color name="warning">#FFC107</color>
+    <color name="success">#4CAF50</color>
+
+    <!-- Warna Splash Screen -->
+    <color name="splash_bg">#2196F3</color>
 </resources>

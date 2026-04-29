@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(WisataDetailActivity.EXTRA_ID, wisata.id)
             startActivity(intent)
         }
-        
+
         binding.rvWisata.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = wisataAdapter
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Setup History Adapter
-        historyAdapter = HistoryAdapter(HistoryRepository.getHistory())
+        historyAdapter = HistoryAdapter(emptyList())
     }
 
     private fun setupSearch() {
@@ -91,11 +91,19 @@ class MainActivity : AppCompatActivity() {
                     showHistoryView()
                     true
                 }
+                R.id.nav_profile -> {
+                    navigateToProfile()
+                    true
+                }
                 else -> false
             }
         }
     }
 
+    private fun navigateToProfile() {
+        val intent = Intent(this, ProfileActivity::class.java)
+        startActivity(intent)
+    }
     private fun showHomeView() {
         binding.tvWelcome.text = "Destinasi Populer"
         binding.incHeader.root.visibility = View.VISIBLE
@@ -108,12 +116,22 @@ class MainActivity : AppCompatActivity() {
         binding.tvWelcome.text = "Riwayat Pemesanan"
         binding.incHeader.root.visibility = View.GONE
         binding.incSearch.root.visibility = View.GONE
-        
-        val historyList = HistoryRepository.getHistory()
+
+        // Dapatkan username yang sedang login
+        val username = sessionManager.getUsername()
+
+        if (username == null) {
+            Toast.makeText(this, "Session error! Silakan login ulang.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Ambil history berdasarkan user yang login
+        val historyList = HistoryRepository.getHistory(this, username)
+
         if (historyList.isEmpty()) {
             Toast.makeText(this, "Belum ada riwayat pemesanan", Toast.LENGTH_SHORT).show()
         }
-        
+
         binding.rvWisata.adapter = historyAdapter
         historyAdapter.updateData(historyList)
     }
@@ -123,8 +141,8 @@ class MainActivity : AppCompatActivity() {
             allWisata
         } else {
             allWisata.filter {
-                it.name.contains(query, ignoreCase = true) || 
-                it.location.contains(query, ignoreCase = true)
+                it.name.contains(query, ignoreCase = true) ||
+                        it.location.contains(query, ignoreCase = true)
             }
         }
         wisataAdapter.updateData(filteredList)
@@ -132,7 +150,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Refresh history if we are in history view
+        // Refresh history jika sedang di tab history
         if (binding.bottomNavigation.selectedItemId == R.id.nav_history) {
             showHistoryView()
         }

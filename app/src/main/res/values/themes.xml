@@ -1,29 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme -->
+    <!-- Base application theme. -->
     <style name="Theme.Tiketin" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color -->
         <item name="colorPrimary">@color/brand_primary</item>
         <item name="colorPrimaryVariant">@color/brand_primary_variant</item>
         <item name="colorOnPrimary">@color/text_white</item>
-
-        <!-- Secondary brand color -->
         <item name="colorSecondary">@color/brand_secondary</item>
         <item name="colorSecondaryVariant">@color/brand_secondary_variant</item>
-        <item name="colorOnSecondary">@color/black</item>
-
-        <!-- Status bar color -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-
-        <!-- Surface color -->
-        <item name="android:colorBackground">@color/surface</item>
-        <item name="colorSurface">@color/surface</item>
-        <item name="colorOnSurface">@color/text_primary</item>
-
-        <!-- Text colors -->
-        <item name="android:textColorPrimary">@color/text_primary</item>
-        <item name="android:textColorSecondary">@color/text_secondary</item>
-
-        <!-- Error color -->
-        <item name="colorError">@color/error</item>
+        <item name="colorOnSecondary">@color/text_white</item>
+        <item name="android:windowBackground">@color/background</item>
     </style>
 </resources>

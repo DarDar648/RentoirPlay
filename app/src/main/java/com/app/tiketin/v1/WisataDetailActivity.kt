@@ -31,6 +31,7 @@ class WisataDetailActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityWisataDetailBinding
+    private lateinit var sessionManager: UserSessionManager
     private var isDescriptionExpanded = false
     private var selectedPaket: PaketWisata? = null
 
@@ -38,6 +39,9 @@ class WisataDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWisataDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Inisialisasi session manager
+        sessionManager = UserSessionManager(this)
 
         setupToolbar()
 
@@ -157,11 +161,20 @@ class WisataDetailActivity : AppCompatActivity() {
             }
         }
 
-        // Step 2 Finalization
+        // Step 2 Finalization - PERBAIKAN dengan menyimpan per user
         bottomSheetBinding.btnFinalConfirm.setOnClickListener {
             val date = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(Date())
-            
-            // Save to History Repository
+
+            // Dapatkan username yang sedang login
+            val username = sessionManager.getUsername()
+
+            if (username == null) {
+                Toast.makeText(this, "Session error! Silakan login ulang.", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+                return@setOnClickListener
+            }
+
+            // Save to History Repository (versi baru dengan username)
             val historyItem = HistoryItem(
                 id = System.currentTimeMillis().toString(),
                 wisataName = wisata.name,
@@ -170,7 +183,9 @@ class WisataDetailActivity : AppCompatActivity() {
                 date = date,
                 imageResId = wisata.imageResId
             )
-            HistoryRepository.addHistory(historyItem)
+
+            // Gunakan repository baru dengan context dan username
+            HistoryRepository.addHistory(this@WisataDetailActivity, username, historyItem)
 
             Toast.makeText(
                 this,

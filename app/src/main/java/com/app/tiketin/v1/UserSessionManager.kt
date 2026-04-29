@@ -49,9 +49,17 @@ class UserSessionManager(context: Context) {
         return sharedPref.getString(KEY_USERNAME, null)
     }
 
-    // Logout
+    // ✅ PERBAIKAN: Logout hanya hapus session, TIDAK menghapus semua akun
     fun logout() {
-        editor.clear()
+        editor.remove(KEY_IS_LOGGED_IN)
+        editor.remove(KEY_USERNAME)
+        editor.remove(KEY_REMEMBER_ME)
+        editor.apply()
+    }
+
+    // Opsional: Hapus akun tertentu (jika ingin fitur hapus akun)
+    fun deleteUserAccount(username: String) {
+        editor.remove("acc_$username")
         editor.apply()
     }
 }

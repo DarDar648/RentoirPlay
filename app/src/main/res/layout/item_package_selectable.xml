@@ -5,45 +5,72 @@
     android:id="@+id/cardPackage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="0dp"
-    app:strokeWidth="1dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="2dp"
     app:strokeColor="@color/surface_variant">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvPackageName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="Paket Hemat" />
+            android:layout_toStartOf="@+id/ivSelected"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvPackageDuration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_secondary"
-            android:textSize="12sp"
-            tools:text="⏳ Durasi: 3 Hari 2 Malam" />
+            <TextView
+                android:id="@+id/tvPackageName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Paket Snorkeling 3 Hari" />
 
-        <TextView
-            android:id="@+id/tvPackagePrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/brand_primary"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="Rp 1.500.000" />
+            <TextView
+                android:id="@+id/tvPackageDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                tools:text="⏳ 3 Hari 2 Malam" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvPackageFacilities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/text_muted"
+                android:textSize="12sp"
+                tools:text="• Penginapan • Makan 3x • Alat Snorkeling" />
+
+            <TextView
+                android:id="@+id/tvPackagePrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/brand_primary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Rp 5.000.000" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivSelected"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_launcher_foreground"
+            android:visibility="gone"
+            app:tint="@color/brand_primary" />
+
+    </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

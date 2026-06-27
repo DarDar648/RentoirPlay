@@ -12,7 +12,6 @@ data class WisataItem(
     val operationalHours: String,
     val phoneNumber: String,
     val website: String,
-    val imageResId: Int,
     val gallery: List<Int>,
     val tourPackages: List<PaketWisata>
 )

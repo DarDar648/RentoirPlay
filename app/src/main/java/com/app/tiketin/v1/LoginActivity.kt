@@ -4,12 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.app.tiketin.v1.data.DatabaseHelper
 import com.app.tiketin.v1.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var sessionManager: UserSessionManager
+    private lateinit var dbHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,6 +19,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         sessionManager = UserSessionManager(this)
+        dbHelper = DatabaseHelper(this)
 
         // Auto login jika sudah pernah login sebelumnya
         if (sessionManager.isLoggedIn()) {
@@ -38,7 +41,8 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (sessionManager.validateLogin(username, password)) {
+            // Validasi menggunakan SQLite
+            if (dbHelper.checkUser(username, password)) {
                 sessionManager.createLoginSession(username, rememberMe)
                 Toast.makeText(this, "Login Berhasil! Selamat datang $username", Toast.LENGTH_SHORT).show()
                 navigateToMain()

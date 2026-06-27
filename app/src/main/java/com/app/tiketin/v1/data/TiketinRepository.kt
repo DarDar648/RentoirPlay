@@ -14,13 +14,12 @@ object TiketinRepository {
                 location = "Kabupaten Raja Ampat, Papua Barat",
                 rating = 4.9,
                 reviewCount = 1250,
-                price = 2500000,
+                price = 5000000,
                 description = "Raja Ampat adalah surga bawah laut dunia yang terletak di jantung Segitiga Karang Dunia. Kepulauan ini memiliki kekayaan hayati laut yang tak tertandingi, dengan lebih dari 1.500 jenis ikan dan 75% spesies karang dunia ditemukan di sini.\n\nSelain keindahan bawah lautnya, Anda juga dapat menikmati pemandangan gugusan pulau karst yang memukau seperti di Wayag atau Piaynemo. Aktivitas populer di sini meliputi diving, snorkeling, bird watching (melihat burung Cendrawasih), dan kayaking menyusuri hutan bakau.",
                 facilities = listOf("Pusat Informasi", "Penyewaan Alat Diving", "Pemandu Wisata", "Resort Eksotis", "Restoran Seafood"),
                 operationalHours = "24 Jam (Setiap Hari)",
                 phoneNumber = "+62 812 3456 7890",
                 website = "www.rajaampat-wisata.com",
-                imageResId = R.drawable.wisata1,
                 gallery = listOf(R.drawable.wisata1, R.drawable.wisata2, R.drawable.wisata3),
                 tourPackages = listOf(
                     PaketWisata("Paket Snorkeling 3 Hari", 5000000, "3 Hari 2 Malam", listOf("Penginapan", "Makan 3x", "Alat Snorkeling")),
@@ -39,7 +38,6 @@ object TiketinRepository {
                 operationalHours = "03.00 - 18.00 WIB",
                 phoneNumber = "+62 821 9876 5432",
                 website = "www.bromotengger.id",
-                imageResId = R.drawable.wisata2,
                 gallery = listOf(R.drawable.wisata2, R.drawable.wisata3, R.drawable.wisata1),
                 tourPackages = listOf(
                     PaketWisata("Open Trip Sunrise", 350000, "12 Jam", listOf("Transport Jeep", "Tiket Masuk", "Sarapan")),
@@ -58,10 +56,9 @@ object TiketinRepository {
                 operationalHours = "08.00 - 20.00 WIB",
                 phoneNumber = "+62 852 1122 3344",
                 website = "www.tobadiscovery.com",
-                imageResId = R.drawable.wisata3,
                 gallery = listOf(R.drawable.wisata3, R.drawable.wisata1, R.drawable.wisata2),
                 tourPackages = listOf(
-                    PaketWisata("Island Hopping Samosir", 450000, "8 Jam", listOf("Sewa Kapal", "Pemandu Lokal", "Makan Siang")),
+                    PaketWisata("Island Hopping Samosir", 500000, "8 Jam", listOf("Sewa Kapal", "Pemandu Lokal", "Makan Siang")),
                     PaketWisata("Batak Cultural Experience", 1200000, "3 Hari 2 Malam", listOf("Kursus Tari", "Stay di Rumah Adat", "Full Board Meal"))
                 )
             )

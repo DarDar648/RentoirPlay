@@ -32,7 +32,12 @@ class WisataAdapter(
     inner class ListViewHolder(private val binding: ItemWisataBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: WisataItem) {
             with(binding) {
-                imgWisata.setImageResource(item.imageResId)
+                // Mengambil gambar berdasarkan ID wisata (misal id=1 -> wisata1)
+                val context = root.context
+                val imageName = "wisata${item.id}"
+                val resId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
+                imgWisata.setImageResource(if (resId != 0) resId else R.drawable.wisata1)
+
                 tvName.text = item.name
                 tvLocation.text = item.location
                 tvRating.text = "⭐ ${item.rating}"

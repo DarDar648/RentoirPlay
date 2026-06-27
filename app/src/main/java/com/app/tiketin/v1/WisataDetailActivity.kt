@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.tiketin.v1.adapter.PackageSelectionAdapter
+import com.app.tiketin.v1.data.DatabaseHelper
 import com.app.tiketin.v1.data.HistoryRepository
-import com.app.tiketin.v1.data.TiketinRepository
 import com.app.tiketin.v1.databinding.ActivityWisataDetailBinding
 import com.app.tiketin.v1.databinding.BottomSheetPackageBinding
 import com.app.tiketin.v1.model.HistoryItem
@@ -32,6 +32,7 @@ class WisataDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWisataDetailBinding
     private lateinit var sessionManager: UserSessionManager
+    private lateinit var dbHelper: DatabaseHelper
     private var isDescriptionExpanded = false
     private var selectedPaket: PaketWisata? = null
 
@@ -40,18 +41,18 @@ class WisataDetailActivity : AppCompatActivity() {
         binding = ActivityWisataDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inisialisasi session manager
         sessionManager = UserSessionManager(this)
+        dbHelper = DatabaseHelper(this)
 
         setupToolbar()
 
         val id = intent.getIntExtra(EXTRA_ID, -1)
-        val item = TiketinRepository.getWisataById(id)
+        val item = dbHelper.getWisataById(id)
 
         if (item != null) {
             displayData(item)
         } else {
-            Toast.makeText(this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Data tidak ditemukan di database", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
@@ -65,66 +66,58 @@ class WisataDetailActivity : AppCompatActivity() {
 
     private fun displayData(item: WisataItem) {
         with(binding) {
-            imgWisata.setImageResource(item.imageResId)
+            // Mengambil gambar berdasarkan ID wisata
+            val imageName = "wisata${item.id}"
+            val resId = resources.getIdentifier(imageName, "drawable", packageName)
+            imgWisata.setImageResource(if (resId != 0) resId else R.drawable.wisata1)
+
             tvName.text = item.name
             tvLocation.text = item.location
             tvRating.text = item.rating.toString()
-            tvReviewCount.text = getString(R.string.review_count_format, item.reviewCount)
+            tvReviewCount.text = "(${item.reviewCount} ulasan)"
             tvPrice.text = formatCurrency(item.price)
             tvDesc.text = item.description
 
-            // Expandable Description
             btnReadMore.setOnClickListener {
                 if (isDescriptionExpanded) {
                     tvDesc.maxLines = 4
-                    btnReadMore.text = getString(R.string.read_more)
+                    btnReadMore.text = "Selengkapnya"
                 } else {
                     tvDesc.maxLines = Int.MAX_VALUE
-                    btnReadMore.text = getString(R.string.read_less)
+                    btnReadMore.text = "Lebih Sedikit"
                 }
                 isDescriptionExpanded = !isDescriptionExpanded
             }
 
-            // Facilities
             chipGroupFacilities.removeAllViews()
             item.facilities.forEach { facility ->
                 val chip = Chip(this@WisataDetailActivity).apply {
                     text = facility
                     isClickable = false
-                    setChipBackgroundColorResource(R.color.surface_soft)
                 }
                 chipGroupFacilities.addView(chip)
             }
 
-            // Important Info
-            tvOperational.text = getString(R.string.operational_hours_format, item.operationalHours)
-            tvPhone.text = getString(R.string.phone_format, item.phoneNumber)
-            tvWebsite.text = getString(R.string.website_format, item.website)
+            tvOperational.text = "Jam Operasional: ${item.operationalHours}"
+            tvPhone.text = "Telepon: ${item.phoneNumber}"
+            tvWebsite.text = "Website: ${item.website}"
 
-            // Gallery
             layoutGallery.removeAllViews()
             item.gallery.forEach { imgRes ->
                 val imageView = ImageView(this@WisataDetailActivity).apply {
-                    val size = resources.getDimensionPixelSize(R.dimen.space_xl) * 4
+                    val size = 200
                     layoutParams = LinearLayout.LayoutParams(size, size).apply {
-                        setMargins(0, 0, resources.getDimensionPixelSize(R.dimen.space_sm), 0)
+                        setMargins(0, 0, 16, 0)
                     }
                     setImageResource(imgRes)
                     scaleType = ImageView.ScaleType.CENTER_CROP
-                    clipToOutline = true
-                    setBackgroundResource(R.drawable.ic_launcher_background)
-                    setOnClickListener {
-                        Toast.makeText(context, getString(R.string.opening_photo), Toast.LENGTH_SHORT).show()
-                    }
                 }
                 layoutGallery.addView(imageView)
             }
 
-            // Packages (Listing in detail page)
             layoutPackages.removeAllViews()
             item.tourPackages.forEach { paket ->
-                val packageView = createPackageView(paket)
-                layoutPackages.addView(packageView)
+                layoutPackages.addView(createPackageView(paket))
             }
 
             btnBookNow.setOnClickListener {
@@ -138,7 +131,7 @@ class WisataDetailActivity : AppCompatActivity() {
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(bottomSheetBinding.root)
 
-        selectedPaket = null // Reset selection
+        selectedPaket = null
 
         val adapter = PackageSelectionAdapter(wisata.tourPackages) { paket ->
             selectedPaket = paket
@@ -149,49 +142,38 @@ class WisataDetailActivity : AppCompatActivity() {
             this.adapter = adapter
         }
 
-        // Step 1 -> Step 2 (Selection to Payment)
         bottomSheetBinding.btnConfirm.setOnClickListener {
             if (selectedPaket != null) {
                 bottomSheetBinding.layoutSelection.visibility = View.GONE
                 bottomSheetBinding.layoutPayment.visibility = View.VISIBLE
                 bottomSheetBinding.tvPaymentAmount.text = "Total: ${formatCurrency(selectedPaket!!.price)}"
-                bottomSheetBinding.ivQrCode.setImageResource(R.drawable.ic_launcher_background)
             } else {
-                Toast.makeText(this, getString(R.string.msg_select_package_first), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Pilih paket terlebih dahulu", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Step 2 Finalization - PERBAIKAN dengan menyimpan per user
         bottomSheetBinding.btnFinalConfirm.setOnClickListener {
             val date = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(Date())
-
-            // Dapatkan username yang sedang login
             val username = sessionManager.getUsername()
 
             if (username == null) {
-                Toast.makeText(this, "Session error! Silakan login ulang.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Session error!", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
                 return@setOnClickListener
             }
 
-            // Save to History Repository (versi baru dengan username)
             val historyItem = HistoryItem(
                 id = System.currentTimeMillis().toString(),
                 wisataName = wisata.name,
                 packageName = selectedPaket?.name ?: "",
                 price = selectedPaket?.price ?: 0,
                 date = date,
-                imageResId = wisata.imageResId
+                wisataId = wisata.id
             )
 
-            // Gunakan repository baru dengan context dan username
             HistoryRepository.addHistory(this@WisataDetailActivity, username, historyItem)
 
-            Toast.makeText(
-                this,
-                getString(R.string.msg_booking_success, selectedPaket?.name, formatCurrency(selectedPaket!!.price)),
-                Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(this, "Pemesanan ${selectedPaket?.name} Berhasil!", Toast.LENGTH_LONG).show()
             dialog.dismiss()
         }
 
@@ -201,31 +183,16 @@ class WisataDetailActivity : AppCompatActivity() {
     private fun createPackageView(paket: PaketWisata): View {
         val container = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(
-                resources.getDimensionPixelSize(R.dimen.space_md),
-                resources.getDimensionPixelSize(R.dimen.space_md),
-                resources.getDimensionPixelSize(R.dimen.space_md),
-                resources.getDimensionPixelSize(R.dimen.space_md)
-            )
-            val params = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            params.setMargins(0, 0, 0, resources.getDimensionPixelSize(R.dimen.space_sm))
-            layoutParams = params
-            setBackgroundResource(R.drawable.ic_launcher_background)
-            backgroundTintList = getColorStateList(R.color.surface_soft)
-            elevation = 2f
-
-            setOnClickListener {
-                Toast.makeText(this@WisataDetailActivity, getString(R.string.selecting_package, paket.name), Toast.LENGTH_SHORT).show()
+            setPadding(16, 16, 16, 16)
+            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                setMargins(0, 0, 0, 8)
             }
+            setBackgroundResource(android.R.drawable.dialog_holo_light_frame)
         }
 
         val tvPackageName = TextView(this).apply {
             text = paket.name
             textSize = 16f
-            setTextColor(getColor(R.color.text_primary))
             setTypeface(null, android.graphics.Typeface.BOLD)
         }
         container.addView(tvPackageName)
@@ -233,23 +200,15 @@ class WisataDetailActivity : AppCompatActivity() {
         val tvPackagePrice = TextView(this).apply {
             text = formatCurrency(paket.price)
             textSize = 14f
-            setTextColor(getColor(R.color.brand_primary))
-            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTextColor(getColor(android.R.color.holo_blue_dark))
         }
         container.addView(tvPackagePrice)
-
-        val tvDuration = TextView(this).apply {
-            text = getString(R.string.duration_format, paket.duration)
-            textSize = 12f
-            setTextColor(getColor(R.color.text_secondary))
-        }
-        container.addView(tvDuration)
 
         return container
     }
 
     private fun formatCurrency(amount: Int): String {
-        val format = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"))
+        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
         return format.format(amount).replace(",00", "")
     }
 }

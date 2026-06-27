@@ -2,6 +2,7 @@ package com.app.tiketin.v1
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.app.tiketin.v1.data.DatabaseHelper
 import com.app.tiketin.v1.model.UserProfileData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -9,6 +10,7 @@ import com.google.gson.reflect.TypeToken
 class UserProfileManager(context: Context) {
 
     private val sharedPref: SharedPreferences = context.getSharedPreferences("user_profile", Context.MODE_PRIVATE)
+    private val dbHelper = DatabaseHelper(context)
     private val gson = Gson()
 
     companion object {
@@ -20,11 +22,22 @@ class UserProfileManager(context: Context) {
     }
 
     fun saveProfile(username: String, profile: UserProfileData) {
+        // Simpan ke SharedPreferences
         val json = gson.toJson(profile)
         sharedPref.edit().putString(getProfileKey(username), json).apply()
+        
+        // Simpan ke Database
+        dbHelper.updateUserProfile(username, profile)
     }
 
     fun getProfile(username: String): UserProfileData {
+        // Coba ambil dari database dulu
+        val dbProfile = dbHelper.getUserProfile(username)
+        if (dbProfile != null && (dbProfile.namaLengkap.isNotBlank() || dbProfile.email.isNotBlank())) {
+            return dbProfile
+        }
+
+        // Jika di database kosong, coba ambil dari SharedPreferences (fallback)
         val json = sharedPref.getString(getProfileKey(username), null)
         if (json == null) return UserProfileData()
 

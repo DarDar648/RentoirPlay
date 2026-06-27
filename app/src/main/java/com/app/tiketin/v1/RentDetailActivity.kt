@@ -32,7 +32,11 @@ class RentDetailActivity : AppCompatActivity() {
             return
         }
 
-        binding.imgRent.setImageResource(item.imageResId)
+        // Mengambil gambar berdasarkan ID wisata
+        val imageName = "wisata${item.id}"
+        val resId = resources.getIdentifier(imageName, "drawable", packageName)
+        binding.imgRent.setImageResource(if (resId != 0) resId else R.drawable.wisata1)
+
         binding.tvName.text = item.name
         binding.tvMeta.text = "${item.location} • ⭐ ${item.rating}"
         binding.tvPrice.text = rupiah.format(item.price)

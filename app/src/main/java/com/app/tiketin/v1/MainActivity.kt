@@ -6,10 +6,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.tiketin.v1.adapter.HistoryAdapter
 import com.app.tiketin.v1.adapter.WisataAdapter
+import com.app.tiketin.v1.data.DatabaseHelper
 import com.app.tiketin.v1.data.HistoryRepository
 import com.app.tiketin.v1.data.TiketinRepository
 import com.app.tiketin.v1.databinding.ActivityMainBinding
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var sessionManager: UserSessionManager
+    private lateinit var dbHelper: DatabaseHelper
     private lateinit var wisataAdapter: WisataAdapter
     private lateinit var historyAdapter: HistoryAdapter
     private var allWisata = listOf<WisataItem>()
@@ -29,7 +32,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         sessionManager = UserSessionManager(this)
-        allWisata = TiketinRepository.getWisata()
+        dbHelper = DatabaseHelper(this)
+
+        // Isi/Seeding Data Wisata ke SQLite jika masih kosong
+        loadAndSeedWisata()
 
         setupHeader()
         setupRecyclerView()
@@ -46,13 +52,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadAndSeedWisata() {
+        allWisata = dbHelper.getAllWisata()
+        if (allWisata.isEmpty()) {
+            val initialData = TiketinRepository.getWisata()
+            initialData.forEach { dbHelper.addWisata(it) }
+            allWisata = dbHelper.getAllWisata()
+        }
+    }
+
     private fun setupHeader() {
         val username = sessionManager.getUsername()
         binding.incHeader.tvGreeting.text = "Selamat Datang, $username!"
     }
 
     private fun setupRecyclerView() {
-        // Setup Wisata Adapter
         wisataAdapter = WisataAdapter(allWisata) { wisata ->
             val intent = Intent(this, WisataDetailActivity::class.java)
             intent.putExtra(WisataDetailActivity.EXTRA_ID, wisata.id)
@@ -65,8 +79,22 @@ class MainActivity : AppCompatActivity() {
             isNestedScrollingEnabled = false
         }
 
-        // Setup History Adapter
-        historyAdapter = HistoryAdapter(emptyList())
+        historyAdapter = HistoryAdapter(emptyList()) { item ->
+            showDeleteConfirmationDialog(item.id)
+        }
+    }
+
+    private fun showDeleteConfirmationDialog(itemId: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Hapus Riwayat")
+            .setMessage("Apakah Anda yakin ingin menghapus riwayat pembelian ini?")
+            .setPositiveButton("Hapus") { _, _ ->
+                HistoryRepository.deleteHistoryItem(this, itemId)
+                Toast.makeText(this, "Riwayat dihapus", Toast.LENGTH_SHORT).show()
+                showHistoryView() // Refresh history view
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 
     private fun setupSearch() {
@@ -104,11 +132,13 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ProfileActivity::class.java)
         startActivity(intent)
     }
+
     private fun showHomeView() {
         binding.tvWelcome.text = "Destinasi Populer"
         binding.incHeader.root.visibility = View.VISIBLE
         binding.incSearch.root.visibility = View.VISIBLE
         binding.rvWisata.adapter = wisataAdapter
+        allWisata = dbHelper.getAllWisata()
         wisataAdapter.updateData(allWisata)
     }
 
@@ -117,23 +147,19 @@ class MainActivity : AppCompatActivity() {
         binding.incHeader.root.visibility = View.GONE
         binding.incSearch.root.visibility = View.GONE
 
-        // Dapatkan username yang sedang login
         val username = sessionManager.getUsername()
-
         if (username == null) {
             Toast.makeText(this, "Session error! Silakan login ulang.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Ambil history berdasarkan user yang login
         val historyList = HistoryRepository.getHistory(this, username)
-
+        binding.rvWisata.adapter = historyAdapter
+        historyAdapter.updateData(historyList)
+        
         if (historyList.isEmpty()) {
             Toast.makeText(this, "Belum ada riwayat pemesanan", Toast.LENGTH_SHORT).show()
         }
-
-        binding.rvWisata.adapter = historyAdapter
-        historyAdapter.updateData(historyList)
     }
 
     private fun filterData(query: String) {
@@ -150,9 +176,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Refresh history jika sedang di tab history
         if (binding.bottomNavigation.selectedItemId == R.id.nav_history) {
             showHistoryView()
+        } else {
+            allWisata = dbHelper.getAllWisata()
+            wisataAdapter.updateData(allWisata)
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.app.tiketin.v1.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.tiketin.v1.R
@@ -32,18 +33,23 @@ class PackageSelectionAdapter(
         val paket = packages[position]
         with(holder.binding) {
             tvPackageName.text = paket.name
-            tvPackageDuration.text = root.context.getString(R.string.duration_format, paket.duration)
+            tvPackageDuration.text = "⏳ ${paket.duration}"
             tvPackagePrice.text = formatCurrency(paket.price)
+            
+            // Format facilities: • Fac 1 • Fac 2
+            tvPackageFacilities.text = paket.facilities.joinToString(" • ", prefix = "• ")
 
             val context = root.context
             if (position == selectedPosition) {
                 cardPackage.strokeColor = context.getColor(R.color.brand_primary)
-                cardPackage.strokeWidth = 4
+                cardPackage.strokeWidth = 6
                 cardPackage.setCardBackgroundColor(context.getColor(R.color.surface_soft))
+                ivSelected.visibility = View.VISIBLE
             } else {
                 cardPackage.strokeColor = context.getColor(R.color.surface_variant)
                 cardPackage.strokeWidth = 2
                 cardPackage.setCardBackgroundColor(context.getColor(R.color.surface))
+                ivSelected.visibility = View.GONE
             }
 
             root.setOnClickListener {
@@ -61,7 +67,7 @@ class PackageSelectionAdapter(
     override fun getItemCount(): Int = packages.size
 
     private fun formatCurrency(amount: Int): String {
-        val format = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"))
+        val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
         return format.format(amount).replace(",00", "")
     }
 }

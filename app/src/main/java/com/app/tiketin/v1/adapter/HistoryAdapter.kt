@@ -3,13 +3,16 @@ package com.app.tiketin.v1.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.app.tiketin.v1.R
 import com.app.tiketin.v1.databinding.ItemHistoryBinding
 import com.app.tiketin.v1.model.HistoryItem
 import java.text.NumberFormat
 import java.util.Locale
 
-class HistoryAdapter(private var items: List<HistoryItem>) :
-    RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
+class HistoryAdapter(
+    private var items: List<HistoryItem>,
+    private val onDeleteClick: (HistoryItem) -> Unit
+) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -25,11 +28,21 @@ class HistoryAdapter(private var items: List<HistoryItem>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         with(holder.binding) {
-            ivHistoryImage.setImageResource(item.imageResId)
+            // Mengambil gambar berdasarkan wisataId
+            val context = root.context
+            val imageName = "wisata${item.wisataId}"
+            val resId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
+            ivHistoryImage.setImageResource(if (resId != 0) resId else R.drawable.ic_launcher_background)
+
             tvHistoryWisataName.text = item.wisataName
             tvHistoryPackageName.text = item.packageName
             tvHistoryDate.text = item.date
             tvHistoryPrice.text = formatCurrency(item.price)
+
+            // Setup click listener untuk tombol hapus
+            btnDeleteHistory.setOnClickListener {
+                onDeleteClick(item)
+            }
         }
     }
 

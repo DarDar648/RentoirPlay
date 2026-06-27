@@ -6,5 +6,5 @@ data class HistoryItem(
     val packageName: String,
     val price: Int,
     val date: String,
-    val imageResId: Int
+    val wisataId: Int
 )

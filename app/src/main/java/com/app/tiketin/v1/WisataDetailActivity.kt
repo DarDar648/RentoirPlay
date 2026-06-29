@@ -1,5 +1,9 @@
 package com.app.tiketin.v1
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +49,7 @@ class WisataDetailActivity : AppCompatActivity() {
         dbHelper = DatabaseHelper(this)
 
         setupToolbar()
+        checkNotificationPermission()
 
         val id = intent.getIntExtra(EXTRA_ID, -1)
         val item = dbHelper.getWisataById(id)
@@ -62,6 +67,14 @@ class WisataDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
+            }
+        }
     }
 
     private fun displayData(item: WisataItem) {
@@ -172,6 +185,14 @@ class WisataDetailActivity : AppCompatActivity() {
             )
 
             HistoryRepository.addHistory(this@WisataDetailActivity, username, historyItem)
+
+            // Send Broadcast for notification
+            val intent = Intent("com.app.tiketin.v1.ACTION_TICKET_BOOKED").apply {
+                putExtra("WISATA_NAME", wisata.name)
+                putExtra("PACKAGE_NAME", selectedPaket?.name ?: "")
+                setPackage(packageName)
+            }
+            sendBroadcast(intent)
 
             Toast.makeText(this, "Pemesanan ${selectedPaket?.name} Berhasil!", Toast.LENGTH_LONG).show()
             dialog.dismiss()

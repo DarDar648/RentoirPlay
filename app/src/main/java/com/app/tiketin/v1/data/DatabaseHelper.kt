@@ -17,7 +17,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "tiketin.db"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 4
         private const val TAG = "DatabaseHelper"
 
         private const val TABLE_WISATA = "wisata"
@@ -34,7 +34,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 "email TEXT, " +
                 "umur INTEGER, " +
                 "nomor_ktp TEXT, " +
-                "nomor_telepon TEXT)")
+                "nomor_telepon TEXT, " +
+                "profile_picture TEXT)")
         
         db.execSQL("CREATE TABLE $TABLE_WISATA (" +
                 "id INTEGER PRIMARY KEY, " +
@@ -136,7 +137,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 email = cursor.getString(cursor.getColumnIndexOrThrow("email")) ?: "",
                 umur = cursor.getInt(cursor.getColumnIndexOrThrow("umur")),
                 nomorKtp = cursor.getString(cursor.getColumnIndexOrThrow("nomor_ktp")) ?: "",
-                nomorTelepon = cursor.getString(cursor.getColumnIndexOrThrow("nomor_telepon")) ?: ""
+                nomorTelepon = cursor.getString(cursor.getColumnIndexOrThrow("nomor_telepon")) ?: "",
+                profileImageUri = cursor.getString(cursor.getColumnIndexOrThrow("profile_picture"))
             )
         }
         cursor.close()
@@ -151,6 +153,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put("umur", profile.umur)
             put("nomor_ktp", profile.nomorKtp)
             put("nomor_telepon", profile.nomorTelepon)
+            put("profile_picture", profile.profileImageUri)
         }
         return db.update("users", values, "username = ?", arrayOf(username))
     }

@@ -1,7 +1,9 @@
 package com.app.tiketin.v1
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.app.tiketin.v1.databinding.ActivityProfileBinding
@@ -13,6 +15,15 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var sessionManager: UserSessionManager
     private lateinit var profileManager: UserProfileManager
     private var currentUsername: String? = null
+    private var selectedImageUri: Uri? = null
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri != null) {
+            selectedImageUri = uri
+            binding.ivProfilePhoto.setImageURI(uri)
+            binding.ivProfilePhoto.setPadding(0, 0, 0, 0) // Remove padding when image is set
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +43,11 @@ class ProfileActivity : AppCompatActivity() {
 
         // Setup tombol simpan
         setupSaveButton()
+
+        // Setup ganti foto
+        binding.ivProfilePhoto.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
     }
 
     private fun setupToolbar() {
@@ -71,6 +87,13 @@ class ProfileActivity : AppCompatActivity() {
         binding.etNomorKtp.setText(profile.nomorKtp)
         binding.etNomorTelepon.setText(profile.nomorTelepon)
         binding.etEmail.setText(profile.email)
+
+        if (!profile.profileImageUri.isNullOrEmpty()) {
+            val uri = Uri.parse(profile.profileImageUri)
+            binding.ivProfilePhoto.setImageURI(uri)
+            binding.ivProfilePhoto.setPadding(0, 0, 0, 0)
+            selectedImageUri = uri
+        }
     }
 
     private fun setupSaveButton() {
@@ -136,7 +159,8 @@ class ProfileActivity : AppCompatActivity() {
             umur = umur,
             nomorKtp = nomorKtp,
             nomorTelepon = nomorTelepon,
-            email = email
+            email = email,
+            profileImageUri = selectedImageUri?.toString()
         )
 
         profileManager.saveProfile(username, profile)

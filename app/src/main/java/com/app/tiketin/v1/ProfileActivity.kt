@@ -2,12 +2,16 @@ package com.app.tiketin.v1
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.app.tiketin.v1.databinding.ActivityProfileBinding
 import com.app.tiketin.v1.model.UserProfileData
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -19,9 +23,32 @@ class ProfileActivity : AppCompatActivity() {
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
-            selectedImageUri = uri
-            binding.ivProfilePhoto.setImageURI(uri)
-            binding.ivProfilePhoto.setPadding(0, 0, 0, 0) // Remove padding when image is set
+            val localPath = copyImageToInternalStorage(uri)
+            if (localPath != null) {
+                // Simpan PATH absolutnya saja agar lebih mudah diolah sebagai File
+                selectedImageUri = Uri.fromFile(File(localPath))
+                binding.ivProfilePhoto.setImageURI(selectedImageUri)
+                binding.ivProfilePhoto.setPadding(0, 0, 0, 0)
+            }
+        }
+    }
+
+    private fun copyImageToInternalStorage(uri: Uri): String? {
+        return try {
+            val inputStream: InputStream? = contentResolver.openInputStream(uri)
+            val fileName = "profile_${currentUsername ?: "user"}_${System.currentTimeMillis()}.jpg"
+            val file = File(filesDir, fileName)
+            
+            // Hapus foto lama jika ada (opsional)
+            
+            val outputStream = FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.close()
+            file.absolutePath
+        } catch (e: Exception) {
+            Log.e("ProfileActivity", "Error copying image: ${e.message}")
+            null
         }
     }
 
@@ -89,10 +116,27 @@ class ProfileActivity : AppCompatActivity() {
         binding.etEmail.setText(profile.email)
 
         if (!profile.profileImageUri.isNullOrEmpty()) {
-            val uri = Uri.parse(profile.profileImageUri)
-            binding.ivProfilePhoto.setImageURI(uri)
-            binding.ivProfilePhoto.setPadding(0, 0, 0, 0)
-            selectedImageUri = uri
+            try {
+                // Cek apakah ini path lokal (dimulai dengan /data atau /storage) atau URI (content://)
+                if (profile.profileImageUri.startsWith("/")) {
+                    val file = File(profile.profileImageUri)
+                    if (file.exists()) {
+                        binding.ivProfilePhoto.setImageURI(Uri.fromFile(file))
+                        binding.ivProfilePhoto.setPadding(0, 0, 0, 0)
+                        selectedImageUri = Uri.fromFile(file)
+                    }
+                } else {
+                    // Fallback untuk data lama yang mungkin masih menyimpan content://
+                    val uri = Uri.parse(profile.profileImageUri)
+                    binding.ivProfilePhoto.setImageURI(uri)
+                    binding.ivProfilePhoto.setPadding(0, 0, 0, 0)
+                    selectedImageUri = uri
+                }
+            } catch (e: Exception) {
+                Log.e("ProfileActivity", "Error loading photo: ${e.message}")
+                binding.ivProfilePhoto.setImageResource(R.drawable.ic_default_profile)
+                binding.ivProfilePhoto.setPadding(16, 16, 16, 16)
+            }
         }
     }
 
@@ -154,13 +198,20 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         // ===== SIMPAN PROFILE =====
+        // Gunakan path absolut dari file lokal jika ada
+        val imagePathToSave = if (selectedImageUri?.scheme == "file") {
+            selectedImageUri?.path
+        } else {
+            selectedImageUri?.toString()
+        }
+
         val profile = UserProfileData(
             namaLengkap = namaLengkap,
             umur = umur,
             nomorKtp = nomorKtp,
             nomorTelepon = nomorTelepon,
             email = email,
-            profileImageUri = selectedImageUri?.toString()
+            profileImageUri = imagePathToSave
         )
 
         profileManager.saveProfile(username, profile)

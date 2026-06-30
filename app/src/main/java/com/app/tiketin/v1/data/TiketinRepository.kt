@@ -47,6 +47,27 @@ object TiketinRepository {
             }
     }
 
+    fun syncWisataFromFirebase(
+        dbHelper: DatabaseHelper,
+        onComplete: (Boolean) -> Unit
+    ) {
+        android.util.Log.d("TiketinRepository", "Starting sync from Firebase...")
+        getWisata(
+            onSuccess = { list ->
+                android.util.Log.d("TiketinRepository", "Fetched ${list.size} items from Firebase")
+                list.forEach { 
+                    val rowId = dbHelper.addWisata(it)
+                    android.util.Log.d("TiketinRepository", "Inserted/Updated item ${it.name} (ID: ${it.id}) - Result: $rowId")
+                }
+                onComplete(true)
+            },
+            onError = {
+                android.util.Log.e("TiketinRepository", "Sync error: $it")
+                onComplete(false)
+            }
+        )
+    }
+
     fun syncRagunanToFirebase(onComplete: (Boolean) -> Unit) {
         val nusaPenida = WisataItem(
             id = 4,

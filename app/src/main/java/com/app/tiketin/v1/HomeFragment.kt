@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.tiketin.v1.adapter.WisataAdapter
+import com.app.tiketin.v1.data.DatabaseHelper
 import com.app.tiketin.v1.data.TiketinRepository
 import com.app.tiketin.v1.databinding.FragmentHomeBinding
 import com.app.tiketin.v1.model.WisataItem
@@ -22,6 +23,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var sessionManager: UserSessionManager
     private lateinit var wisataAdapter: WisataAdapter
+    private lateinit var dbHelper: DatabaseHelper
     private var allWisata = listOf<WisataItem>()
     private var isGridView = false
 
@@ -37,6 +39,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         sessionManager = UserSessionManager(requireContext())
+        dbHelper = DatabaseHelper(requireContext())
         
         setupHeader()
         setupRecyclerView()
@@ -57,9 +60,12 @@ class HomeFragment : Fragment() {
 
         loadWisata()
         
-        // Sync Ragunan dan Ancol
-        TiketinRepository.syncRagunanToFirebase { success ->
-            if (success) loadWisata()
+        // Sync dari Firebase ke SQLite
+        TiketinRepository.syncWisataFromFirebase(dbHelper) { success ->
+            if (success) {
+                // Setelah sync berhasil, reload data dari SQLite (atau Firebase)
+                loadWisata()
+            }
         }
     }
 

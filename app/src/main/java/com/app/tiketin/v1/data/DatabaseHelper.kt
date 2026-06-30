@@ -17,7 +17,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "tiketin.db"
-        private const val DATABASE_VERSION = 4
+        private const val DATABASE_VERSION = 5
         private const val TAG = "DatabaseHelper"
 
         private const val TABLE_WISATA = "wisata"
@@ -50,7 +50,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 "phone_number TEXT, " +
                 "website TEXT, " +
                 "gallery TEXT, " +
-                "tour_packages TEXT)")
+                "tour_packages TEXT, " +
+                "latitude REAL, " +
+                "longitude REAL)")
 
         db.execSQL("CREATE TABLE history (" +
                 "id TEXT PRIMARY KEY, " +
@@ -85,6 +87,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put("website", w.website)
             put("gallery", gson.toJson(w.gallery))
             put("tour_packages", gson.toJson(w.tourPackages))
+            put("latitude", w.latitude)
+            put("longitude", w.longitude)
         }
         return db.insertWithOnConflict(TABLE_WISATA, null, v, SQLiteDatabase.CONFLICT_REPLACE)
     }
@@ -93,9 +97,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val list = mutableListOf<WisataItem>()
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM $TABLE_WISATA", null)
-        
+
         val typeStr: Type = object : TypeToken<List<String>>() {}.type
-        val typeInt: Type = object : TypeToken<List<Int>>() {}.type
         val typePaket: Type = object : TypeToken<List<PaketWisata>>() {}.type
 
         if (cursor.moveToFirst()) {
@@ -113,8 +116,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                         operationalHours = cursor.getString(cursor.getColumnIndexOrThrow("operational_hours")),
                         phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("phone_number")),
                         website = cursor.getString(cursor.getColumnIndexOrThrow("website")),
-                        gallery = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow("gallery")), typeInt),
-                        tourPackages = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow("tour_packages")), typePaket)
+                        gallery = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow("gallery")), typeStr),
+                        tourPackages = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow("tour_packages")), typePaket),
+                        latitude = cursor.getDouble(cursor.getColumnIndexOrThrow("latitude")),
+                        longitude = cursor.getDouble(cursor.getColumnIndexOrThrow("longitude"))
                     ))
                 } catch (e: Exception) { Log.e(TAG, "Parse error: ${e.message}") }
             } while (cursor.moveToNext())

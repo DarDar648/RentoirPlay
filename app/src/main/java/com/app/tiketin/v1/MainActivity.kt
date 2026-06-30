@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var wisataAdapter: WisataAdapter
     private lateinit var historyAdapter: HistoryAdapter
     private var allWisata = listOf<WisataItem>()
+    private var isGridView = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +71,10 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         setupSearch()
         setupBottomNavigation()
+
+        binding.incSearch.btnFilter.setOnClickListener {
+            toggleLayout()
+        }
 
         // Data
         loadAndSeedWisata()
@@ -223,6 +228,16 @@ class MainActivity : AppCompatActivity() {
         
         if (historyList.isEmpty()) {
             Toast.makeText(this, "Belum ada riwayat pemesanan", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun toggleLayout() {
+        isGridView = !isGridView
+        wisataAdapter.setGridView(isGridView)
+        binding.rvWisata.layoutManager = if (isGridView) {
+            androidx.recyclerview.widget.GridLayoutManager(this, 2)
+        } else {
+            LinearLayoutManager(this)
         }
     }
 

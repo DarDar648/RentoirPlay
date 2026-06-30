@@ -36,7 +36,9 @@ class HistoryAdapter(
                 1 -> "wisata1"
                 2 -> "wisata2"
                 3 -> "wisata3"
-                4 -> "wisata1"
+                4 -> "wisata13"
+                5 -> "wisata15"
+                6 -> "wisata8"
                 else -> "wisata1"
             }
 

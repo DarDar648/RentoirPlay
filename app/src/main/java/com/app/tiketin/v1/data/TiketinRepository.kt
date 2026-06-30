@@ -60,7 +60,7 @@ object TiketinRepository {
             operationalHours = "24 Jam",
             phoneNumber = "+62 812 0000 1111",
             website = "www.nusapenida.id",
-            gallery = listOf("wisata1", "wisata2", "wisata3"),
+            gallery = listOf("wisata13", "wisata12", "wisata14"),
             tourPackages = listOf(
                 PaketWisata("One Day Trip West", 750000, "10 Jam", listOf("Transport", "Tiket Masuk", "Makan Siang"))
             ),
@@ -80,7 +80,7 @@ object TiketinRepository {
             operationalHours = "07.00 - 16.00 WIB",
             phoneNumber = "+62 21 7884 7114",
             website = "ragunanzoo.jakarta.go.id",
-            gallery = listOf("wisata4", "wisata5", "wisata6", "wisata7"),
+            gallery = listOf("wisata15", "wisata5", "wisata6", "wisata7"),
             tourPackages = listOf(
                 PaketWisata("Tiket Masuk Dewasa", 4000, "Satu Hari", listOf("Akses Area", "Asuransi"))
             ),

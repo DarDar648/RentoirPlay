@@ -9,5 +9,7 @@
         <item name="colorSecondaryVariant">@color/brand_secondary_variant</item>
         <item name="colorOnSecondary">@color/text_white</item>
         <item name="android:windowBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
     </style>
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Warna untuk aplikasi Tiketin (Dark Mode) -->
+    <color name="background">#121212</color>
+    <color name="text_primary">#E1E1E1</color>
+    <color name="text_secondary">#B0B0B0</color>
+    <color name="text_muted">#808080</color>
+    <color name="text_white">#FFFFFF</color>
+
+    <!-- Warna Surface -->
+    <color name="surface">#1E1E1E</color>
+    <color name="surface_soft">#2C2C2C</color>
+    <color name="surface_variant">#383838</color>
+</resources>

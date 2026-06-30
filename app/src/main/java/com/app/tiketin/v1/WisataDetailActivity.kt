@@ -41,6 +41,7 @@ class WisataDetailActivity : AppCompatActivity() {
     //private lateinit var dbHelper: DatabaseHelper
     private var isDescriptionExpanded = false
     private var selectedPaket: PaketWisata? = null
+    private var quantity = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -205,6 +206,20 @@ class WisataDetailActivity : AppCompatActivity() {
         dialog.setContentView(bottomSheetBinding.root)
 
         selectedPaket = null
+        quantity = 1
+        bottomSheetBinding.tvQuantity.text = quantity.toString()
+
+        bottomSheetBinding.btnPlus.setOnClickListener {
+            quantity++
+            bottomSheetBinding.tvQuantity.text = quantity.toString()
+        }
+
+        bottomSheetBinding.btnMinus.setOnClickListener {
+            if (quantity > 1) {
+                quantity--
+                bottomSheetBinding.tvQuantity.text = quantity.toString()
+            }
+        }
 
         val adapter = PackageSelectionAdapter(wisata.tourPackages) { paket ->
             selectedPaket = paket
@@ -219,7 +234,8 @@ class WisataDetailActivity : AppCompatActivity() {
             if (selectedPaket != null) {
                 bottomSheetBinding.layoutSelection.visibility = View.GONE
                 bottomSheetBinding.layoutPayment.visibility = View.VISIBLE
-                bottomSheetBinding.tvPaymentAmount.text = "Total: ${formatCurrency(selectedPaket!!.price)}"
+                val totalPrice = selectedPaket!!.price * quantity
+                bottomSheetBinding.tvPaymentAmount.text = "Total: ${formatCurrency(totalPrice)} ($quantity tiket)"
             } else {
                 Toast.makeText(this, "Pilih paket terlebih dahulu", Toast.LENGTH_SHORT).show()
             }
@@ -237,9 +253,9 @@ class WisataDetailActivity : AppCompatActivity() {
 
             val historyItem = HistoryItem(
                 id = System.currentTimeMillis().toString(),
-                wisataName = wisata.name,
+                wisataName = "${wisata.name} (${quantity}x)",
                 packageName = selectedPaket?.name ?: "",
-                price = selectedPaket?.price ?: 0,
+                price = (selectedPaket?.price ?: 0) * quantity,
                 date = date,
                 wisataId = wisata.id
             )
@@ -249,7 +265,7 @@ class WisataDetailActivity : AppCompatActivity() {
             // Send Broadcast for notification
             val intent = Intent("com.app.tiketin.v1.ACTION_TICKET_BOOKED").apply {
                 putExtra("WISATA_NAME", wisata.name)
-                putExtra("PACKAGE_NAME", selectedPaket?.name ?: "")
+                putExtra("PACKAGE_NAME", "${selectedPaket?.name ?: ""} ($quantity tiket)")
                 setPackage(packageName)
             }
             sendBroadcast(intent)

@@ -134,9 +134,30 @@ class WisataDetailActivity : AppCompatActivity() {
             }
 
             btnBookNow.setOnClickListener {
-                showPackageSelectionBottomSheet(item)
+                val username = sessionManager.getUsername()
+                if (username != null) {
+                    val profileManager = UserProfileManager(this@WisataDetailActivity)
+                    if (profileManager.isProfileComplete(username)) {
+                        showPackageSelectionBottomSheet(item)
+                    } else {
+                        showCompleteProfileDialog()
+                    }
+                } else {
+                    Toast.makeText(this@WisataDetailActivity, "Silakan login terlebih dahulu", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+    }
+
+    private fun showCompleteProfileDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Data Diri Belum Lengkap")
+            .setMessage("Silakan lengkapi data diri Anda terlebih dahulu sebelum melakukan pemesanan tiket.")
+            .setPositiveButton("Lengkapi Sekarang") { _, _ ->
+                startActivity(Intent(this, ProfileActivity::class.java))
+            }
+            .setNegativeButton("Nanti", null)
+            .show()
     }
 
     private fun showPackageSelectionBottomSheet(wisata: WisataItem) {

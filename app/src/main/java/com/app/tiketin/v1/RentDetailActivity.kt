@@ -1,5 +1,6 @@
 package com.app.tiketin.v1
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,12 +16,17 @@ class RentDetailActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityRentDetailBinding
+    private lateinit var sessionManager: UserSessionManager
+    private lateinit var profileManager: UserProfileManager
     private val rupiah = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRentDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sessionManager = UserSessionManager(this)
+        profileManager = UserProfileManager(this)
 
         val id = intent.getIntExtra(EXTRA_RENT_ID, -1)
 
@@ -43,7 +49,27 @@ class RentDetailActivity : AppCompatActivity() {
         binding.tvDesc.text = item.description
 
         binding.btnAddToCart.setOnClickListener {
-            Toast.makeText(this, "Dipilih: ${item.name}", Toast.LENGTH_SHORT).show()
+            val username = sessionManager.getUsername()
+            if (username != null) {
+                if (profileManager.isProfileComplete(username)) {
+                    Toast.makeText(this, "Berhasil memesan: ${item.name}", Toast.LENGTH_SHORT).show()
+                } else {
+                    showCompleteProfileDialog()
+                }
+            } else {
+                Toast.makeText(this, "Silakan login terlebih dahulu", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    private fun showCompleteProfileDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Data Diri Belum Lengkap")
+            .setMessage("Silakan lengkapi data diri Anda terlebih dahulu sebelum melakukan pemesanan.")
+            .setPositiveButton("Lengkapi Sekarang") { _, _ ->
+                startActivity(Intent(this, ProfileActivity::class.java))
+            }
+            .setNegativeButton("Nanti", null)
+            .show()
     }
 }

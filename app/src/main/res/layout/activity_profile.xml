@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,138 +16,236 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#F5F5F5"
+            android:background="@color/background"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="Profil Saya"
-            app:titleTextColor="#1C1C1C" />
+            app:titleTextColor="@color/text_primary" />
 
-        <!-- Foto Profil (Default Icon) -->
-        <LinearLayout
+        <!-- Foto Profil Section -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
 
-            <ImageView
-                android:id="@+id/ivProfilePhoto"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_default_profile"
-                android:background="@drawable/circle_background"
-                android:padding="24dp"
-                android:scaleType="centerCrop"
-                android:clipToOutline="true"
-                android:elevation="4dp" />
-
-            <TextView
-                android:id="@+id/tvUsername"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="username"
-                android:textColor="#1C1C1C"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ketuk untuk ganti foto"
-                android:textColor="@color/brand_primary"
-                android:textSize="12sp" />
-        </LinearLayout>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    app:cardCornerRadius="60dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/brand_primary"
+                    app:strokeWidth="2dp">
+
+                    <ImageView
+                        android:id="@+id/ivProfilePhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="12dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_default_profile"
+                        android:contentDescription="Foto Profil" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="username"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Ketuk foto untuk mengubah"
+                    android:textColor="@color/brand_primary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Form Data Diri -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Data Diri"
-                    android:textColor="#1C1C1C"
+                    android:layout_marginBottom="8dp"
+                    android:text="Lengkapi Data Diri"
+                    android:textColor="@color/brand_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:text="Data ini diperlukan untuk proses pemesanan tiket."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <!-- Nama Lengkap -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:hint="Nama Lengkap"
-                    app:endIconMode="clear_text">
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="@color/surface_soft"
+                    app:boxCornerRadiusTopStart="@dimen/radius_sm"
+                    app:boxCornerRadiusTopEnd="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomStart="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomEnd="@dimen/radius_sm"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="1dp"
+                    app:startIconDrawable="@android:drawable/ic_menu_edit"
+                    app:startIconTint="@color/brand_primary"
+                    app:hintTextColor="@color/brand_primary"
+                    android:textColorHint="@color/text_secondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNamaLengkap"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName" />
+                        android:background="@android:color/transparent"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Umur -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:hint="Umur"
-                    app:endIconMode="clear_text">
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="@color/surface_soft"
+                    app:boxCornerRadiusTopStart="@dimen/radius_sm"
+                    app:boxCornerRadiusTopEnd="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomStart="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomEnd="@dimen/radius_sm"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="1dp"
+                    app:startIconDrawable="@android:drawable/ic_menu_today"
+                    app:startIconTint="@color/brand_primary"
+                    app:hintTextColor="@color/brand_primary"
+                    android:textColorHint="@color/text_secondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etUmur"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:background="@android:color/transparent"
+                        android:inputType="number"
+                        android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Nomor KTP -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:hint="Nomor KTP"
-                    app:endIconMode="clear_text">
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="@color/surface_soft"
+                    app:boxCornerRadiusTopStart="@dimen/radius_sm"
+                    app:boxCornerRadiusTopEnd="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomStart="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomEnd="@dimen/radius_sm"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="1dp"
+                    app:startIconDrawable="@android:drawable/ic_menu_agenda"
+                    app:startIconTint="@color/brand_primary"
+                    app:hintTextColor="@color/brand_primary"
+                    android:textColorHint="@color/text_secondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNomorKtp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:background="@android:color/transparent"
+                        android:inputType="number"
+                        android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Nomor Telepon -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:hint="Nomor Telepon"
-                    app:endIconMode="clear_text">
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="@color/surface_soft"
+                    app:boxCornerRadiusTopStart="@dimen/radius_sm"
+                    app:boxCornerRadiusTopEnd="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomStart="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomEnd="@dimen/radius_sm"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="1dp"
+                    app:startIconDrawable="@android:drawable/ic_menu_call"
+                    app:startIconTint="@color/brand_primary"
+                    app:hintTextColor="@color/brand_primary"
+                    android:textColorHint="@color/text_secondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNomorTelepon"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone" />
+                        android:background="@android:color/transparent"
+                        android:inputType="phone"
+                        android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Alamat Email -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:hint="Alamat Email"
-                    app:endIconMode="clear_text">
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="@color/surface_soft"
+                    app:boxCornerRadiusTopStart="@dimen/radius_sm"
+                    app:boxCornerRadiusTopEnd="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomStart="@dimen/radius_sm"
+                    app:boxCornerRadiusBottomEnd="@dimen/radius_sm"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="1dp"
+                    app:startIconDrawable="@android:drawable/ic_dialog_email"
+                    app:startIconTint="@color/brand_primary"
+                    app:hintTextColor="@color/brand_primary"
+                    android:textColorHint="@color/text_secondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:background="@android:color/transparent"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -158,11 +256,16 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveProfile"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="60dp"
             android:layout_marginTop="24dp"
-            android:text="SIMPAN PROFIL"
+            android:layout_marginBottom="24dp"
+            android:text="SIMPAN DATA DIRI"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:backgroundTint="@color/brand_primary"
-            app:cornerRadius="12dp" />
+            app:cornerRadius="12dp"
+            app:elevation="4dp" />
     </LinearLayout>
 
 </ScrollView>

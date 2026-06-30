@@ -1,5 +1,4 @@
 plugins {
-    // Menggunakan alias plugin Android Application dari katalog libs
     alias(libs.plugins.android.application)
 }
 android {
@@ -71,6 +70,11 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation(platform("com.google.firebase:firebase-bom:34.0.0"))
+
+    implementation("com.google.firebase:firebase-database-ktx:21.0.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
 
     // Dependensi untuk unit testing
     testImplementation(libs.junit)

@@ -16,6 +16,9 @@ import com.app.tiketin.v1.data.HistoryRepository
 import com.app.tiketin.v1.data.TiketinRepository
 import com.app.tiketin.v1.databinding.ActivityMainBinding
 import com.app.tiketin.v1.model.WisataItem
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,30 +31,60 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val options = FirebaseOptions.Builder()
+            .setApiKey("AIzaSyDKINlGg-dwUw5KSxN6_uTBZa_iSQyxeVU")
+            .setApplicationId("1:1074160777827:android:f0a05b49df610234899656")
+            .setProjectId("pokemon-5d1b3")
+            .setDatabaseUrl("https://pokemon-5d1b3-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .setStorageBucket("pokemon-5d1b3.firebasestorage.app")
+            .build()
+
+        if (FirebaseApp.getApps(this).isEmpty()) {
+            FirebaseApp.initializeApp(this, options)
+        }
+
+        val database = FirebaseDatabase.getInstance()
+        // Tes koneksi Firebase
+
+        database.reference
+            .child("test")
+            .setValue("Halo Firebase")
+            .addOnSuccessListener {
+                Toast.makeText(this, "Firebase berhasil terhubung!", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Firebase gagal: ${it.message}", Toast.LENGTH_LONG).show()
+            }
+
+        // View Binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Inisialisasi
         sessionManager = UserSessionManager(this)
         dbHelper = DatabaseHelper(this)
 
-        // Isi/Seeding Data Wisata ke SQLite jika masih kosong
+        // Data
         loadAndSeedWisata()
 
+        // Setup UI
         setupHeader()
         setupRecyclerView()
         setupSearch()
         setupBottomNavigation()
 
+        // Logout
         binding.btnLogout.setOnClickListener {
             sessionManager.logout()
             Toast.makeText(this, "Logout berhasil!", Toast.LENGTH_SHORT).show()
+
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
         }
     }
-
     private fun loadAndSeedWisata() {
         allWisata = dbHelper.getAllWisata()
         if (allWisata.isEmpty()) {

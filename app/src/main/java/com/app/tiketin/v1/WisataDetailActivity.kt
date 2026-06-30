@@ -116,15 +116,26 @@ class WisataDetailActivity : AppCompatActivity() {
             tvWebsite.text = "Website: ${item.website}"
 
             layoutGallery.removeAllViews()
-            item.gallery.forEach { imgRes ->
+            item.gallery.forEach { imageName ->
                 val imageView = ImageView(this@WisataDetailActivity).apply {
                     val size = 200
                     layoutParams = LinearLayout.LayoutParams(size, size).apply {
                         setMargins(0, 0, 16, 0)
                     }
-                    setImageResource(imgRes)
+
+                    val resId = resources.getIdentifier(
+                        imageName,
+                        "drawable",
+                        packageName
+                    )
+
+                    setImageResource(
+                        if (resId != 0) resId else R.drawable.wisata1
+                    )
+
                     scaleType = ImageView.ScaleType.CENTER_CROP
                 }
+
                 layoutGallery.addView(imageView)
             }
 

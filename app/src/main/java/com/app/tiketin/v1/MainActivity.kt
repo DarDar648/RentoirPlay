@@ -84,14 +84,49 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        TiketinRepository.getWisata(
+
+            onSuccess = { list ->
+
+                Toast.makeText(
+                    this,
+                    "Data berhasil: ${list.size}",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                list.forEach {
+                    println(it.name)
+                }
+
+            },
+
+            onError = {
+                Toast.makeText(
+                    this,
+                    it,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        )
     }
     private fun loadAndSeedWisata() {
-        allWisata = dbHelper.getAllWisata()
-        if (allWisata.isEmpty()) {
-            val initialData = TiketinRepository.getWisata()
-            initialData.forEach { dbHelper.addWisata(it) }
-            allWisata = dbHelper.getAllWisata()
-        }
+
+        TiketinRepository.getWisata(
+
+            onSuccess = { list ->
+
+                allWisata = list
+
+                wisataAdapter.updateData(list)
+
+            },
+
+            onError = {
+
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+
+            }
+        )
     }
 
     private fun setupHeader() {
@@ -167,12 +202,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showHomeView() {
+
         binding.tvWelcome.text = "Destinasi Populer"
         binding.incHeader.root.visibility = View.VISIBLE
         binding.incSearch.root.visibility = View.VISIBLE
+
         binding.rvWisata.adapter = wisataAdapter
-        allWisata = dbHelper.getAllWisata()
-        wisataAdapter.updateData(allWisata)
+
+        TiketinRepository.getWisata(
+
+            onSuccess = { list ->
+                allWisata = list
+                wisataAdapter.updateData(list)
+            },
+
+            onError = {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     private fun showHistoryView() {
@@ -209,11 +256,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
         if (binding.bottomNavigation.selectedItemId == R.id.nav_history) {
+
             showHistoryView()
+
         } else {
-            allWisata = dbHelper.getAllWisata()
-            wisataAdapter.updateData(allWisata)
+
+            TiketinRepository.getWisata(
+
+                onSuccess = { list ->
+                    allWisata = list
+                    wisataAdapter.updateData(list)
+                },
+
+                onError = {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 }

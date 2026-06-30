@@ -18,10 +18,12 @@ class RentDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRentDetailBinding
     private lateinit var sessionManager: UserSessionManager
     private lateinit var profileManager: UserProfileManager
+
     private val rupiah = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityRentDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -30,44 +32,83 @@ class RentDetailActivity : AppCompatActivity() {
 
         val id = intent.getIntExtra(EXTRA_RENT_ID, -1)
 
-        val item = TiketinRepository.getWisataById(id)
+        TiketinRepository.getWisataById(
+            id = id,
 
-        if (item == null) {
-            Toast.makeText(this, "Data wisata tidak ditemukan", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
+            onSuccess = { item ->
 
-        // Mengambil gambar berdasarkan ID wisata
-        val imageName = "wisata${item.id}"
-        val resId = resources.getIdentifier(imageName, "drawable", packageName)
-        binding.imgRent.setImageResource(if (resId != 0) resId else R.drawable.wisata1)
-
-        binding.tvName.text = item.name
-        binding.tvMeta.text = "${item.location} • ⭐ ${item.rating}"
-        binding.tvPrice.text = rupiah.format(item.price)
-        binding.tvDesc.text = item.description
-
-        binding.btnAddToCart.setOnClickListener {
-            val username = sessionManager.getUsername()
-            if (username != null) {
-                if (profileManager.isProfileComplete(username)) {
-                    // Send Broadcast for notification
-                    val intent = Intent("com.app.tiketin.v1.ACTION_TICKET_BOOKED").apply {
-                        putExtra("WISATA_NAME", item.name)
-                        putExtra("PACKAGE_NAME", "Sewa Kendaraan")
-                        setPackage(packageName)
-                    }
-                    sendBroadcast(intent)
-
-                    Toast.makeText(this, "Berhasil memesan: ${item.name}", Toast.LENGTH_SHORT).show()
-                } else {
-                    showCompleteProfileDialog()
+                if (item == null) {
+                    Toast.makeText(
+                        this,
+                        "Data wisata tidak ditemukan",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                    return@getWisataById
                 }
-            } else {
-                Toast.makeText(this, "Silakan login terlebih dahulu", Toast.LENGTH_SHORT).show()
+
+                val imageName = "wisata${item.id}"
+                val resId = resources.getIdentifier(
+                    imageName,
+                    "drawable",
+                    packageName
+                )
+
+                binding.imgRent.setImageResource(
+                    if (resId != 0) resId else R.drawable.wisata1
+                )
+
+                binding.tvName.text = item.name
+                binding.tvMeta.text = "${item.location} • ⭐ ${item.rating}"
+                binding.tvPrice.text = rupiah.format(item.price)
+                binding.tvDesc.text = item.description
+
+                binding.btnAddToCart.setOnClickListener {
+
+                    val username = sessionManager.getUsername()
+
+                    if (username == null) {
+                        Toast.makeText(
+                            this,
+                            "Silakan login terlebih dahulu",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@setOnClickListener
+                    }
+
+                    if (!profileManager.isProfileComplete(username)) {
+                        showCompleteProfileDialog()
+                        return@setOnClickListener
+                    }
+
+                    val broadcastIntent =
+                        Intent("com.app.tiketin.v1.ACTION_TICKET_BOOKED").apply {
+                            putExtra("WISATA_NAME", item.name)
+                            putExtra("PACKAGE_NAME", "Sewa Kendaraan")
+                            setPackage(packageName)
+                        }
+
+                    sendBroadcast(broadcastIntent)
+
+                    Toast.makeText(
+                        this,
+                        "Berhasil memesan: ${item.name}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+
+            onError = { error ->
+
+                Toast.makeText(
+                    this,
+                    error,
+                    Toast.LENGTH_LONG
+                ).show()
+
+                finish()
             }
-        }
+        )
     }
 
     private fun showCompleteProfileDialog() {

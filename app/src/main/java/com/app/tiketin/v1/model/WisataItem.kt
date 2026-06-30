@@ -1,17 +1,17 @@
 package com.app.tiketin.v1.model
 
 data class WisataItem(
-    val id: Int,
-    val name: String,
-    val location: String,
-    val rating: Double,
-    val reviewCount: Int,
-    val price: Int,
-    val description: String,
-    val facilities: List<String>,
-    val operationalHours: String,
-    val phoneNumber: String,
-    val website: String,
-    val gallery: List<Int>,
-    val tourPackages: List<PaketWisata>
+    val id: Int = 0,
+    val name: String = "",
+    val location: String = "",
+    val rating: Double = 0.0,
+    val reviewCount: Int = 0,
+    val price: Int = 0,
+    val description: String = "",
+    val facilities: List<String> = emptyList(),
+    val operationalHours: String = "",
+    val phoneNumber: String = "",
+    val website: String = "",
+    val gallery: List<String> = emptyList(),
+    val tourPackages: List<PaketWisata> = emptyList()
 )

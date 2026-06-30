@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.tiketin.v1.adapter.PackageSelectionAdapter
@@ -104,6 +105,19 @@ class WisataDetailActivity : AppCompatActivity() {
             tvReviewCount.text = "(${item.reviewCount} ulasan)"
             tvPrice.text = formatCurrency(item.price)
             tvDesc.text = item.description
+
+            btnViewMap.setOnClickListener {
+                val gmmIntentUri = Uri.parse("geo:${item.latitude},${item.longitude}?q=${Uri.encode(item.name)}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                if (mapIntent.resolveActivity(packageManager) != null) {
+                    startActivity(mapIntent)
+                } else {
+                    // Fallback jika tidak ada aplikasi Google Maps
+                    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=${item.latitude},${item.longitude}"))
+                    startActivity(webIntent)
+                }
+            }
 
             btnReadMore.setOnClickListener {
                 if (isDescriptionExpanded) {

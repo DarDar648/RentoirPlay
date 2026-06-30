@@ -47,10 +47,6 @@ object TiketinRepository {
             }
     }
 
-    /**
-     * Fungsi untuk mensinkronkan data Nusa Penida (ID 4), Ragunan (ID 5), dan Ancol (ID 6)
-     * sesuai permintaan user terkait gambar dan penambahan destinasi baru.
-     */
     fun syncRagunanToFirebase(onComplete: (Boolean) -> Unit) {
         val nusaPenida = WisataItem(
             id = 4,
@@ -67,7 +63,9 @@ object TiketinRepository {
             gallery = listOf("wisata1", "wisata2", "wisata3"),
             tourPackages = listOf(
                 PaketWisata("One Day Trip West", 750000, "10 Jam", listOf("Transport", "Tiket Masuk", "Makan Siang"))
-            )
+            ),
+            latitude = -8.7280,
+            longitude = 115.5444
         )
 
         val ragunan = WisataItem(
@@ -85,7 +83,9 @@ object TiketinRepository {
             gallery = listOf("wisata4", "wisata5", "wisata6", "wisata7"),
             tourPackages = listOf(
                 PaketWisata("Tiket Masuk Dewasa", 4000, "Satu Hari", listOf("Akses Area", "Asuransi"))
-            )
+            ),
+            latitude = -6.3124,
+            longitude = 106.8202
         )
 
         val ancol = WisataItem(
@@ -95,17 +95,17 @@ object TiketinRepository {
             rating = 4.6,
             reviewCount = 8500,
             price = 30000,
-            description = "Taman Impian Jaya Ancol merupakan objek wisata tematik terbesar dan terlengkap di Jakarta. Terletak di tepi pantai, Ancol menawarkan berbagai hiburan mulai dari pantai pasir putih, Dunia Fantasi (Dufan), Sea World, Ocean Dream Samudra, hingga Atlantis Water Adventures.",
-            facilities = listOf("Kereta Gantung (Gondola)", "Bus Wara-Wiri", "Area Kuliner", "Pantai", "Pasar Seni", "Hotel", "Musholla"),
+            description = "Taman Impian Jaya Ancol merupakan objek wisata tematik terbesar dan terkengkap di Jakarta.",
+            facilities = listOf("Kereta Gantung (Gondola)", "Bus Wara-Wiri", "Area Kuliner", "Pantai"),
             operationalHours = "06.00 - 22.00 WIB",
             phoneNumber = "+62 21 2922 2222",
             website = "www.ancol.com",
-            gallery = listOf("wisata8", "wisata9", "wisata10"), // Siapkan png wisata8, 9, 10
+            gallery = listOf("wisata8", "wisata9", "wisata10"),
             tourPackages = listOf(
-                PaketWisata("Tiket Masuk Gerbang Ancol", 30000, "Satu Kali Masuk", listOf("Akses Area Pantai dan Taman")),
-                PaketWisata("Annual Pass Dufan", 350000, "1 Tahun", listOf("Gratis Masuk Dufan Selama Setahun", "Diskon Merchant")),
-                PaketWisata("Combo Sea World & Samudra", 200000, "Satu Hari", listOf("Akses Sea World", "Akses Ocean Dream Samudra"))
-            )
+                PaketWisata("Tiket Masuk Gerbang Ancol", 30000, "Satu Kali Masuk", listOf("Akses Area Pantai dan Taman"))
+            ),
+            latitude = -6.1256,
+            longitude = 106.8436
         )
 
         val updates = mapOf(

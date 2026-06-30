@@ -13,5 +13,7 @@ data class WisataItem(
     val phoneNumber: String = "",
     val website: String = "",
     val gallery: List<String> = emptyList(),
-    val tourPackages: List<PaketWisata> = emptyList()
+    val tourPackages: List<PaketWisata> = emptyList(),
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
 )

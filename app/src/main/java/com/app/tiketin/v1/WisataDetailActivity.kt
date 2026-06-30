@@ -93,9 +93,9 @@ class WisataDetailActivity : AppCompatActivity() {
 
     private fun displayData(item: WisataItem) {
         with(binding) {
-            // Mengambil gambar berdasarkan ID wisata
-            val imageName = "wisata${item.id}"
-            val resId = resources.getIdentifier(imageName, "drawable", packageName)
+            // Mengambil gambar: Gunakan item pertama di gallery sebagai cover
+            val coverImageName = if (item.gallery.isNotEmpty()) item.gallery[0] else "wisata${item.id}"
+            val resId = resources.getIdentifier(coverImageName, "drawable", packageName)
             imgWisata.setImageResource(if (resId != 0) resId else R.drawable.wisata1)
 
             tvName.text = item.name

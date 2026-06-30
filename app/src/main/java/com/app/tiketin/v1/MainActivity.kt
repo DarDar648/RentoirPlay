@@ -65,14 +65,22 @@ class MainActivity : AppCompatActivity() {
         sessionManager = UserSessionManager(this)
         dbHelper = DatabaseHelper(this)
 
-        // Data
-        loadAndSeedWisata()
-
         // Setup UI
         setupHeader()
         setupRecyclerView()
         setupSearch()
         setupBottomNavigation()
+
+        // Data
+        loadAndSeedWisata()
+
+        // Sync Ragunan ke Firebase
+        TiketinRepository.syncRagunanToFirebase { success ->
+            if (success) {
+                // Refresh data setelah berhasil sync agar muncul di list
+                loadAndSeedWisata()
+            }
+        }
 
         // Logout
         binding.btnLogout.setOnClickListener {
@@ -84,30 +92,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-        TiketinRepository.getWisata(
-
-            onSuccess = { list ->
-
-                Toast.makeText(
-                    this,
-                    "Data berhasil: ${list.size}",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                list.forEach {
-                    println(it.name)
-                }
-
-            },
-
-            onError = {
-                Toast.makeText(
-                    this,
-                    it,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        )
     }
     private fun loadAndSeedWisata() {
 

@@ -27,6 +27,7 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.app.tiketin.v1.data.TiketinRepository
 
 class WisataDetailActivity : AppCompatActivity() {
 
@@ -36,7 +37,7 @@ class WisataDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWisataDetailBinding
     private lateinit var sessionManager: UserSessionManager
-    private lateinit var dbHelper: DatabaseHelper
+    //private lateinit var dbHelper: DatabaseHelper
     private var isDescriptionExpanded = false
     private var selectedPaket: PaketWisata? = null
 
@@ -46,20 +47,33 @@ class WisataDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         sessionManager = UserSessionManager(this)
-        dbHelper = DatabaseHelper(this)
 
         setupToolbar()
         checkNotificationPermission()
 
         val id = intent.getIntExtra(EXTRA_ID, -1)
-        val item = dbHelper.getWisataById(id)
 
-        if (item != null) {
-            displayData(item)
-        } else {
-            Toast.makeText(this, "Data tidak ditemukan di database", Toast.LENGTH_SHORT).show()
-            finish()
-        }
+        TiketinRepository.getWisataById(
+            id,
+            onSuccess = { item ->
+
+                if (item == null) {
+                    Toast.makeText(
+                        this,
+                        "Data tidak ditemukan",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                    return@getWisataById
+                }
+
+                displayData(item)
+            },
+            onError = {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                finish()
+            }
+        )
     }
 
     private fun setupToolbar() {

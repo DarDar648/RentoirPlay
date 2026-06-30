@@ -27,19 +27,34 @@ class HistoryAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
+
         with(holder.binding) {
-            // Mengambil gambar berdasarkan wisataId
+
             val context = root.context
-            val imageName = "wisata${item.wisataId}"
-            val resId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
-            ivHistoryImage.setImageResource(if (resId != 0) resId else R.drawable.ic_launcher_background)
+
+            val imageName = when (item.wisataId) {
+                1 -> "wisata1"
+                2 -> "wisata2"
+                3 -> "wisata3"
+                4 -> "wisata1"
+                else -> "wisata1"
+            }
+
+            val resId = context.resources.getIdentifier(
+                imageName,
+                "drawable",
+                context.packageName
+            )
+
+            ivHistoryImage.setImageResource(
+                if (resId != 0) resId else R.drawable.ic_launcher_background
+            )
 
             tvHistoryWisataName.text = item.wisataName
             tvHistoryPackageName.text = item.packageName
             tvHistoryDate.text = item.date
             tvHistoryPrice.text = formatCurrency(item.price)
 
-            // Setup click listener untuk tombol hapus
             btnDeleteHistory.setOnClickListener {
                 onDeleteClick(item)
             }

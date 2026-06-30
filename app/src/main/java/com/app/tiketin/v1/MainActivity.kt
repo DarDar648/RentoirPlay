@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupHeader() {
         val username = sessionManager.getUsername()
-        binding.incHeader.tvGreeting.text = "Selamat Datang, $username!"
+        binding.incHeader.tvGreetingName.text = "$username!"
     }
 
     private fun setupRecyclerView() {

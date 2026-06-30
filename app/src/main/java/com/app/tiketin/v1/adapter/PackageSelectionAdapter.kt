@@ -36,8 +36,13 @@ class PackageSelectionAdapter(
             tvPackageDuration.text = "⏳ ${paket.duration}"
             tvPackagePrice.text = formatCurrency(paket.price)
             
-            // Format facilities: • Fac 1 • Fac 2
-            tvPackageFacilities.text = paket.facilities.joinToString(" • ", prefix = "• ")
+            // Safe check for facilities to prevent crash if data is null from database
+            val facilitiesText = try {
+                paket.facilities?.joinToString(" • ", prefix = "• ") ?: "• Fasilitas standar"
+            } catch (e: Exception) {
+                "• Fasilitas standar"
+            }
+            tvPackageFacilities.text = facilitiesText
 
             val context = root.context
             if (position == selectedPosition) {

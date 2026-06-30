@@ -52,6 +52,14 @@ class RentDetailActivity : AppCompatActivity() {
             val username = sessionManager.getUsername()
             if (username != null) {
                 if (profileManager.isProfileComplete(username)) {
+                    // Send Broadcast for notification
+                    val intent = Intent("com.app.tiketin.v1.ACTION_TICKET_BOOKED").apply {
+                        putExtra("WISATA_NAME", item.name)
+                        putExtra("PACKAGE_NAME", "Sewa Kendaraan")
+                        setPackage(packageName)
+                    }
+                    sendBroadcast(intent)
+
                     Toast.makeText(this, "Berhasil memesan: ${item.name}", Toast.LENGTH_SHORT).show()
                 } else {
                     showCompleteProfileDialog()
